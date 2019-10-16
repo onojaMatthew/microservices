@@ -2,9 +2,13 @@ const mongoose = require( "mongoose" );
 const jwt = require( "jsonwebtoken" );
 require( "dotenv" ).config();
 
+// Destructuring Schema from mongoose object
 const { Schema } = mongoose;
 
+// Defining the user schema
 const userSchema = new Schema( {
+  firstName: { type: String },
+  lastName: { type: String },
   email: {
     type: String,
     required: [ true, "Email is required" ],
