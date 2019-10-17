@@ -9,3 +9,11 @@ export const isAuthenticated = () => {
     return false;
   }
 }
+
+/**
+ * Get the userType from localStorage
+ */
+export const userType = () => {
+  const userType = isAuthenticated().user.userType;
+  return userType;
+}

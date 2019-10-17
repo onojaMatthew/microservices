@@ -5,7 +5,6 @@ class NewPoll extends Component {
   render() {
     return (
       <div>
-        <h3>Crea new poll</h3>
         <NewPollForm />
       </div>
     );
