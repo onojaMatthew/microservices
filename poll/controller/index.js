@@ -29,11 +29,11 @@ exports.createPoll = ( req, res ) => {
 
 // Add new tags to the poll with provided ID @pollId
 exports.tags = ( req, res ) => {
-  const newObj = req.body;
+  const newObj = req.body.tags;
   const { usertype, pollId } = req.params;
 
   // We check for user type. If it is not admin return the error message
-  if ( usertype === "admin" ) return res.status( 403 ).json( {
+  if ( usertype !== "admin" ) return res.status( 403 ).json( {
     error: "Only admin is allowed access to this operation"
   } );
   if ( !pollId ) return res.status( 400 ).json( {
@@ -41,6 +41,33 @@ exports.tags = ( req, res ) => {
   } );
 
   Poll.findByIdAndUpdate( pollId, { $push: { tags: newObj } }, { new: true } )
+    .then( poll => {
+      if ( !poll ) return res.status( 400 ).json( {
+        error: "Could not add new tags. Please try again later"
+      } );
+      res.json( poll );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * Set disabled to true for poll with the ID @params pollId
+ */
+exports.disablePoll = ( req, res ) => {
+  const newObj = req.body.tags;
+  const { usertype, pollId } = req.params;
+
+  // We check for user type. If it is not admin return the error message
+  if ( usertype !== "admin" ) return res.status( 403 ).json( {
+    error: "Only admin is allowed access to this operation"
+  } );
+  if ( !pollId ) return res.status( 400 ).json( {
+    error: "Poll ID is not provided. Please ensure you are authorized for this operation"
+  } );
+
+  Poll.findByIdAndUpdate( pollId, { $set: { disabled: true } }, { new: true } )
     .then( poll => {
       if ( !poll ) return res.status( 400 ).json( {
         error: "Could not add new tags. Please try again later"
@@ -63,14 +90,33 @@ exports.votePoll = ( req, res ) => {
   // We check if the poll ID is in the request params. If not, return the error message
   if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is required for voting operation" } );
 
-  // Here we find the poll with the given pollId and update it
-  Poll.findByIdAndUpdate( pollId, { $push: { votes: userId } }, { new: true } )
+  Poll.findOne( { _id: pollId } )
     .then( poll => {
-      if ( !poll ) return res.status( 400 ).json( { error: "Something went wrong. Voting was not successful." } );
+      if ( !poll ) return res.status( 400 ).json( {
+        error: "Poll not found"
+      } )
+
+      /**
+       * Get the votes from the poll and assign it to votes @votes variable
+       * then check if the user id @userId is in it. If it's in it don't allow the vote to proceed
+       * just return the error message
+       */
+      const votes = poll.votes;
+      if ( votes.includes( userId ) ) return res.status( 400 ).json( {
+        error: "you have voted this poll already"
+      } );
+
+      // Here we find the poll with the given pollId and update it
+      Poll.findByIdAndUpdate( pollId, { $push: { votes: userId } }, { new: true } )
+        .then( poll => {
+          if ( !poll ) return res.status( 400 ).json( { error: "Something went wrong. Voting was not successful." } );
+          res.json( poll )
+        } )
+        .catch( err => {
+          res.json( { error: err.message } );
+        } );
     } )
-    .catch( err => {
-      res.json( { error: err.message } );
-    } );
+
 }
 
 // Allows users to like a poll with the given ID
@@ -84,14 +130,33 @@ exports.likePoll = ( req, res ) => {
   // We check if the poll ID is in the request params. If not, return the error message
   if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is required for voting operation" } );
 
-  // Here we find the poll with the given pollId and update it
-  Poll.findByIdAndUpdate( pollId, { $push: { likes: userId } }, { new: true } )
+  Poll.findOne( { _id: pollId } )
     .then( poll => {
-      if ( !poll ) return res.status( 400 ).json( { error: "Something went wrong. Voting was not successful." } );
-    } )
-    .catch( err => {
-      res.json( { error: err.message } );
-    } );
+      if ( !poll ) return res.status( 400 ).json( {
+        error: "Poll not found"
+      } )
+
+      /**
+       * Get the likes from the poll and assign it to likes @likes variable
+       * then check if the user id @userId is in it. If it's in it don't allow the like 
+       * operation to proceed just return the error message
+       */
+      const likes = poll.likes;
+      if ( likes.includes( userId ) ) return res.status( 400 ).json( {
+        error: "you have like this poll already"
+      } );
+
+      // Here we find the poll with the given pollId and update it
+      Poll.findByIdAndUpdate( pollId, { $push: { likes: userId } }, { new: true } )
+        .then( poll => {
+          if ( !poll ) return res.status( 400 ).json( { error: "Something went wrong. Voting was not successful." } );
+          res.json( poll )
+        } )
+        .catch( err => {
+          res.json( { error: err.message } );
+        } );
+    })
+  
 }
 
 // Updates poll photo
@@ -122,7 +187,6 @@ exports.uploadPhoto = ( res, req ) => {
 // We fetch all poll here
 exports.fetchAllPoll = (req, res) => {
   Poll.find( {} )
-    .populate( "createdBy", "firstName lastName email")
     .then(poll => {
       if (!poll) return res.status(400).json({ error: "No records found" });
       res.json(poll);

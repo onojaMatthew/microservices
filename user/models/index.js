@@ -25,8 +25,8 @@ const userSchema = new Schema( {
   },
   role: {
     type: String,
-    enum: [ "admin", "tenant", "user" ],
-    default: ""
+    enum: [ "admin", "user" ],
+    default: "user"
   },
   createdAt: {
     type: Date,
@@ -38,6 +38,7 @@ userSchema.methods.generateToken = function () {
   const token = jwt.sign( {
     _id: this._id, email: this.email, userType: this.userType, role: this.role
   }, process.env.JWT_SECRET_DEAL ) 
+  return token;
 }
 
 const User = mongoose.model( "User", userSchema );

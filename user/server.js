@@ -38,7 +38,8 @@ app.get("/", (req, res) => {
 });
 
 // custom routes
-require("./middleware/routes")(app);
+require( "./middleware/routes" )( app );
+require( "./config/error-logger" )();
 
 // Listening on a port
-app.listen(port, () => console.log(`Api running on port ${port}`));
+app.listen(port, () => console.log(`User Api running on port ${port}`));

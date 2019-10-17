@@ -5,11 +5,11 @@ const morgan = require("morgan");
 
 const app = express();
 
-const port = process.env.PORT || 3010;
+const port = process.env.PORT || 3030;
 db();
 
 app.set("port", port);
-
+app.use( express.static( __dirname ) );
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,8 +31,10 @@ app.get("/", (req, res) => {
 });
 
 // Custom routes
-require("./middleware/routes")(app);
+require( "./middleware/routes" )( app );
+// Error logger
+require( "./config/error-logger" )();
 
 app.listen(port, () => {
-  console.log(`Discussion api running on port ${port}`);
+  console.log(`Poll api running on port ${port}`);
 });
