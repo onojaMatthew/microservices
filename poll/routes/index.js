@@ -14,12 +14,12 @@ const upload = require( "../middleware/fileupload" );
 const router = express.Router();
 
 router.get( "/all", fetchAllPoll );
-router.post( "/create/:userId/:usertype", createPoll );
-router.put( "/like/:usertype/:pollId/:userId/", likePoll );
-router.put( "/tags/:usertype/:pollId", tags );
-router.put( "/disable/:usertype/:pollId", disablePoll );
-router.put( "/vote/:usertype/:pollId/:userId", votePoll );
-router.put( "/upload/:usertype/:pollId/", upload.single("file"), uploadPhoto );
+router.post( "/create/:userId/:userType", createPoll );
+router.put( "/like/:userType/:pollId/:userId/", likePoll );
+router.put( "/tags/:userType/:pollId", tags );
+router.put( "/disable/:userType/:pollId", disablePoll );
+router.put( "/vote/:userType/:pollId/:userId", votePoll );
+router.put( "/upload/:userType/:pollId", upload.single("photo"), uploadPhoto );
 router.delete("/delete/:pollId", deletePoll );
 
 module.exports = router;

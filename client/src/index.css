@@ -92,3 +92,29 @@ html, body {
     margin-top: -110px;
   }
 }
+
+.sidebar {
+  border-right: 1px solid #333;
+  height: 98vh;
+  margin-right: 0;
+}
+
+.user-image img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+}
+
+.sidebar .name {
+  margin-top: 10px;
+}
+
+.banner {
+  background-image: url("./assets/images/banner1.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 250px;
+  width: 103%;
+  margin-left: -27px;
+}

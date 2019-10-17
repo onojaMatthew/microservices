@@ -1,6 +1,6 @@
 const { User } = require("../models");
 const bcrypt = require( "bcrypt" );
-const axios = require( "axios" );
+const fetch = require( "node-fetch" );
 
 // Handles user acount registration
 exports.signup = (req, res) => {
@@ -83,6 +83,38 @@ exports.signin = (req, res) => {
 }
 
 /**
+ * This fetches all users
+ */
+exports.fetchAllUsers = ( req, res ) => {
+  User.find( {} )
+    .then( users => {
+      if ( !users ) return res.status( 400 ).json( { error: "User list is empty" } );
+      res.json( users );
+    } )
+    .catch( err => {
+      res.json( err.message );
+    } );
+}
+
+/**
+ * Deletes user with the ID @param userId
+ */
+exports.userDelete = ( req, res ) => {
+  const { userId } = req.params;
+  console.log(userId)
+  User.findByIdAndDelete( {_id: userId} )
+    .then( user => {
+      if ( !user ) return res.status( 400 ).json( {
+        error: "Operation failed. Please tr again."
+      } );
+      res.json( user );
+    } )
+    .catch( err => {
+      res.json( err.message );
+    } );
+}
+
+/**
  * user account log out
  */
 exports.signout = (req, res) => {
@@ -91,19 +123,250 @@ exports.signout = (req, res) => {
 };
 
 exports.createPoll = ( req, res ) => {
-
   // We destructure @userId and @usertype from request params
-  const { userId, usertype } = req.params;
+  const { userId, userType } = req.params;
   const { user: { _id } } = req;
+  console.log(userId, _id)
   // We destructure @name from request body
   const { name } = req.body;
   // We check for the poll name in the request body. If not proveded, we return the error message
   if ( !name ) return res.status( 400 ).json( { error: "Name is not provided. A poll must have a name" } );
   // We check the user type. If it's not admin, return the error message
-  if ( usertype !== "admin" ) return res.status( 400 ).json( { error: "Only an admin allowed for this operation" } );
+  if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only an admin allowed for this operation" } );
   if ( userId !== _id ) return res.status( 400 ).json( {
     error: "Unknow user ID. Please create an account if you don't have one "
   } );
 
-  axios.post()
+  /**
+   * We make a call to the poll service to create a new poll
+   */
+  axios.post( `http://localhost:3030/api/v1/poll/create/${ userId }/${ userType }`, { name } )
+    .then( response => {
+      if ( response.status === 200 ) {
+        res.json( response.data )
+      }
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
 }
+
+/**
+ * A call the poll service to like the poll with @param pollId
+ */
+exports.likePoll = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userId, userType } = req.params;
+  const { user: { _id } } = req;
+  // We destructure @name from request body
+  
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "user" ) return res.status( 400 ).json( { error: "Only users allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to like the poll with @param pollId
+   */
+  fetch( `http://localhost:3030/api/v1/poll/like/${ userType }/${ pollId }/${ userId }`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    }
+  } )
+    .then(response => response.json())
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Operaion failed. Try again" } );
+      res.json( resp );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * We make to the poll service to vote the poll with @param pollId
+ */
+exports.votePoll = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userId, userType } = req.params;
+  const { user: { _id } } = req;
+  // We destructure @name from request body
+
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "user" ) return res.status( 400 ).json( { error: "Only users allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to vote the poll with @param pollId
+   */
+  fetch( `http://localhost:3030/api/v1/poll/vote/${ userType }/${ pollId }/${ userId }`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    }
+  } )
+    .then(response => response.json())
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Vote failed. Try again"})
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * We make a call to the poll service to add tags to the poll with @param pollId
+ */
+exports.tagsPoll = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userType, userId } = req.params;
+  const { user: { _id } } = req;
+  // We destructure @name from request body
+  let tags;
+  tags = req.body.tags;
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only admin is allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to vote the poll with @param pollId
+   */
+  fetch( `http://localhost:3030/api/v1/poll/tags/${ userType }/${ pollId }/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    },
+    body: JSON.stringify( tags)
+  } )
+    .then(response => response.json())
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Failed update tags."})
+      res.json( resp );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * We make a call to the poll service to disable the poll with @param pollId
+ */
+exports.disablePoll = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userId, userType } = req.params;
+  const { user: { _id } } = req;
+  
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only admin is allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to vote the poll with @param pollId
+   */
+  fetch( `http://localhost:3030/api/v1/poll/disable/${ userType }/${ pollId }`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    },
+  })
+    .then( response => response.json() )
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Failed update tags." } )
+      res.json( resp );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * We make a call to the poll service to upload image for the poll with @param pollId
+ */
+exports.uploadPhoto = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userId, userType } = req.params;
+  const { user: { _id } } = req;
+
+  const photo = req.body;
+
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only admin is allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to vote the poll with @param pollId
+   */
+  fetch( `http://localhost:3030/api/v1/poll/upload/${userType}/${pollId}`, {
+    method: "PUT",
+    body: photo
+  } )
+    .then( response => response.json() )
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Failed update tags." } )
+      res.json( resp );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * We make a call to the poll service to the poll with @param pollId
+ */
+exports.deletePoll = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userId, userType } = req.params;
+  const { user: { _id } } = req;
+
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only admin is allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to delete the poll with @param pollId
+   */
+  axios.delete( `http://localhost:3030/api/v1/poll/delete/${ pollId }`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    },
+  } )
+    .then( response => response.json() )
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Failed to delete poll." } )
+      res.json( resp );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
