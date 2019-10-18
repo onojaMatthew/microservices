@@ -15,7 +15,7 @@ import {
   VOTE_POLL_SUCCESS,
   VOTE_POLL_FAILED,
   DISABLE_POLL_START,
-  DISABLE_POLL_SUCCES,
+  DISABLE_POLL_SUCCESS,
   DISABLE_POLL_FAILED,
   UPLOAD_POLL_PHOTO_START,
   UPLOAD_POLL_PHOTO_SUCCESS,
@@ -139,7 +139,7 @@ const pollReducers = ( state = initialState, action ) => {
         ...state,
         disableLoading: true
       }
-    case DISABLE_POLL_SUCCES:
+    case DISABLE_POLL_SUCCESS:
       return {
         ...state,
         disableSuccess: true,
@@ -186,6 +186,9 @@ const pollReducers = ( state = initialState, action ) => {
         error: action.error
       }
     default:
-      ...state;
+      return state;
   }
 }
+
+
+export default pollReducers;

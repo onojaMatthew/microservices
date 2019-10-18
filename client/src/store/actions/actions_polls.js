@@ -9,9 +9,9 @@ export const CREATE_POLL_FAILED = "CREATE_POLL_FAILED";
 /**
  * Get action type
  */
-export GET_POLL_START = "GET_POLL_START";
-export GET_POLL_SUCCESS = "GET_POLL_SUCCESS";
-export GET_POLL_FAILED = "GET_POLL_FAILED";
+export const GET_POLL_START = "GET_POLL_START";
+export const GET_POLL_SUCCESS = "GET_POLL_SUCCESS";
+export const GET_POLL_FAILED = "GET_POLL_FAILED";
 
 /**
  * tag action type
@@ -38,7 +38,7 @@ export const VOTE_POLL_FAILED = "VOTE_POLL_FAILED";
  * Disable ation type
  */
 export const DISABLE_POLL_START = "DISABLE_POLL_START";
-export const DISABLE_POLL_SUCCES = "DISABLE_POLL_SUCCESS";
+export const DISABLE_POLL_SUCCESS = "DISABLE_POLL_SUCCESS";
 export const DISABLE_POLL_FAILED = "DISABLE_POLL_FAILED";
 
 /**
@@ -136,7 +136,7 @@ export const getPoll = () => {
         dispatch( getPollSuccess( resp ) );
       } )
       .catch( err => {
-        dispatch( getPollFailed( err.message );)
+        dispatch( getPollFailed( err.message ) );
       });
   }
 }
@@ -150,19 +150,19 @@ export const tagPollStart = () => {
 
 export const tagPollSuccess = (data) => {
   return {
-    type: TAG_POLL_SUCCES,
+    type: TAG_POLL_SUCCESS,
     data
   }
 }
 
-export const tagPollFailed = (error) => {
+export const tagPollFailed = ( error ) => {
   return {
     type: TAG_POLL_FAILED,
     error
   }
+}
 
-
-export const tagPoll = (data) => {
+export const tagPoll = (data, pollId) => {
   return dispatch => {
     dispatch( tagPollStart() );
     fetch( `${ BASE_URL }/tags/${ userType() }/${ pollId }`, {
@@ -178,7 +178,7 @@ export const tagPoll = (data) => {
         dispatch( tagPollSuccess( resp ) );
       } )
       .catch( err => {
-        dispatch( tagPollFailed( err.message );)
+        dispatch( tagPollFailed( err.message ))
       });
   }
 }
@@ -192,7 +192,7 @@ export const likePollStart = () => {
 
 export const likePollSuccess = ( data ) => {
   return {
-    type: LIKE_POLL_SUCCES,
+    type: LIKE_POLL_SUCCESS,
     data
   }
 }
@@ -202,7 +202,7 @@ export const likePollFailed = ( error ) => {
     type: LIKE_POLL_FAILED,
     error
   }
-
+}
 
   export const likePoll = ( data,pollId, userId,  ) => {
     return dispatch => {
@@ -220,7 +220,7 @@ export const likePollFailed = ( error ) => {
           dispatch( likePollSuccess( resp ) );
         } )
         .catch( err => {
-          dispatch( likePollFailed( err.message );)
+          dispatch( likePollFailed( err.message ) );
     });
   }
 }
@@ -234,7 +234,7 @@ export const votePollStart = () => {
 
 export const votePollSuccess = ( data ) => {
   return {
-    type: VOTE_POLL_SUCCES,
+    type: VOTE_POLL_SUCCESS,
     data
   }
 }
@@ -244,7 +244,7 @@ export const votePollFailed = ( error ) => {
     type: VOTE_POLL_FAILED,
     error
   }
-
+}
 
   export const votePoll = ( data, pollId, userId, ) => {
     return dispatch => {
@@ -262,7 +262,7 @@ export const votePollFailed = ( error ) => {
           dispatch( votePollSuccess( resp ) );
         } )
         .catch( err => {
-          dispatch( votePollFailed( err.message );)
+          dispatch( votePollFailed( err.message ) );
     });
   }
 }
@@ -270,13 +270,13 @@ export const votePollFailed = ( error ) => {
 
 export const disablePollStart = () => {
   return {
-    type: DISABLE_START
+    type: DISABLE_POLL_START
   }
 }
 
 export const disablePollSuccess = ( data ) => {
   return {
-    type: DISABLE_POLL_SUCCES,
+    type: DISABLE_POLL_SUCCESS,
     data
   }
 }
@@ -286,105 +286,105 @@ export const disablePollFailed = ( error ) => {
     type: DISABLE_POLL_FAILED,
     error
   }
+}
 
-
-  export const disablePoll = ( data, pollId, userId, ) => {
-    return dispatch => {
-      dispatch( disablePollStart() );
-      fetch( `${ BASE_URL }/disable/${ userType() }/${ pollId }/${ userId }`, {
-        method: "PUT",
-        headers: {
-          ACCEPT: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify( data )
+export const disablePoll = ( data, pollId, userId, ) => {
+  return dispatch => {
+    dispatch( disablePollStart() );
+    fetch( `${ BASE_URL }/disable/${ userType() }/${ pollId }/${ userId }`, {
+      method: "PUT",
+      headers: {
+        ACCEPT: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify( data )
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( disablePollSuccess( resp ) );
       } )
-        .then( response => response.json() )
-        .then( resp => {
-          dispatch( disablePollSuccess( resp ) );
-        } )
-        .catch( err => {
-          dispatch( disablePollFailed( err.message );)
-    });
+      .catch( err => {
+        dispatch( disablePollFailed( err.message ) );
+      });
   }
 }
 
 
 export const deletePollStart = () => {
   return {
-    type: DISABLE_START
+    type: DELETE_POLL_START
   }
 }
 
 export const deletePollSuccess = ( data ) => {
   return {
-    type: DISABLE_POLL_SUCCES,
+    type: DELETE_POLL_SUCCESS,
     data
   }
 }
 
 export const deletePollFailed = ( error ) => {
   return {
-    type: DISABLE_POLL_FAILED,
+    type: DELETE_POLL_FAILED,
     error
   }
+}
 
-
-  export const deletePoll = ( data, pollId, userId, ) => {
-    return dispatch => {
-      dispatch( deletePollStart() );
-      fetch( `${ MAIN_BASE_URL }/delete/${ userType() }/${ pollId }`, {
-        method: "PUT",
-        headers: {
-          ACCEPT: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify( data )
+export const deletePoll = ( data, pollId, userId, ) => {
+  return dispatch => {
+    dispatch( deletePollStart() );
+    fetch( `${ MAIN_BASE_URL }/delete/${ userType() }/${ pollId }`, {
+      method: "PUT",
+      headers: {
+        ACCEPT: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify( data )
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( deletePollSuccess( resp ) );
       } )
-        .then( response => response.json() )
-        .then( resp => {
-          dispatch( deletePollSuccess( resp ) );
-        } )
-        .catch( err => {
-          dispatch( deletePollFailed( err.message );)
-    });
+      .catch( err => {
+        dispatch( deletePollFailed( err.message ) );
+      });
   }
 }
 
 
 export const uploadPollStart = () => {
   return {
-    type: UPLOAD_POLL_START
+    type: UPLOAD_POLL_PHOTO_START
   }
 }
 
 export const uploadPollSuccess = ( data ) => {
   return {
-    type: UPLOAD_POLL_SUCCES,
+    type: UPLOAD_POLL_PHOTO_SUCCESS,
     data
   }
 }
 
 export const uploadPollFailed = ( error ) => {
   return {
-    type: UPLOAD_POLL_FAILED,
+    type: UPLOAD_POLL_PHOTO_FAILED,
     error
   }
+}
 
-
-  export const uploadPoll = ( data, pollId, userId, ) => {
-    return dispatch => {
-      dispatch( uploadPollStart() );
-      fetch( `${ MAIN_BASE_URL }/delete/${ userType() }/${ pollId }`, {
-        method: "PUT",
-        body: data
+export const uploadPoll = ( data, pollId, userId, ) => {
+  return dispatch => {
+    dispatch( uploadPollStart() );
+    fetch( `${ MAIN_BASE_URL }/delete/${ userType() }/${ pollId }`, {
+      method: "PUT",
+      body: data
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( uploadPollSuccess( resp ) );
       } )
-        .then( response => response.json() )
-        .then( resp => {
-          dispatch( uploadPollSuccess( resp ) );
-        } )
-        .catch( err => {
-          dispatch( uploadPollFailed( err.message );)
-    });
+      .catch( err => {
+        dispatch( uploadPollFailed( err.message ) );
+      });
   }
 }
