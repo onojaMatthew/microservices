@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import NewPollForm from '../../../contents/NewPollForm';
+import { isAuthenticated } from '../../../../helpers/authenticate';
 
 class NewPoll extends Component {
   state = {
     name: ""
-  
+  }
 
-  onSubmit = ( ) => {
-
+  onSubmit = async ( e ) => {
     e.preventDefault();
-    console.log("you clicked me for submition")
+    const { createPoll } = this.props;
+    const userId = isAuthenticated().user._id;
+    const token = isAuthenticated().token;
+    const { name } = this.state;
+    console.log( "you clicked me for submition" )
+    const data = { name };
+    try {
+      await createPoll( data, userId, token);
+    } catch(err) {}
   }
 
   handleChange = (field, e) => {

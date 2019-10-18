@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Form, Button, Row, Col } from "react-bootstrap";
 
 const NewPollForm = ({ onSubmit, handleChange, name }) => {

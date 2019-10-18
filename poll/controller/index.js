@@ -19,7 +19,7 @@ exports.createPoll = ( req, res ) => {
   });
   return poll.save()
     .then( result => {
-      console.log("inside resul")
+      
       // We check if the promise @result was returned. If not return the error message
       if ( !result ) return res.status( 400 ).json( { error: "Can not create new poll. Please try again" });
       res.json(result);

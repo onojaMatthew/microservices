@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { Row, Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import user from "../../../assets/images/user1.png"
 
 class Sidebar extends Component {

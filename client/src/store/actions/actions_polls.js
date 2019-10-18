@@ -3,7 +3,7 @@ import { userType } from "../../helpers/authenticate";
  * Create action type
  */
 export const CREATE_POLL_START = "CREATE_POLL_START";
-export const CREATE_POLL_SUCCESS = "CREATE_POLL_SUCCRSS";
+export const CREATE_POLL_SUCCESS = "CREATE_POLL_SUCCESS";
 export const CREATE_POLL_FAILED = "CREATE_POLL_FAILED";
 
 /**
@@ -79,14 +79,15 @@ export const createPollFailed = ( error ) => {
 }
 
 
-export const createPoll = (data, userId) => {
+export const createPoll = ( data, userId, token ) => {
   return dispatch => {
     dispatch( createPollStart() );
     fetch( `${ BASE_URL }/create/${ userType() }/${ userId }`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ACCEPT: "application/json"
+        ACCEPT: "application/json",
+        "x-auth-token": token
       },
       body: JSON.stringify( data )
     } )

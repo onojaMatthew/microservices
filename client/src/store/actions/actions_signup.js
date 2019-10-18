@@ -31,7 +31,7 @@ export const signupFailed = ( error ) => {
 export const signup = ( data, userType ) => {
   return dispatch => {
     dispatch( signupStart() );
-    axios.post( `http://localhost:3020/user/signup/${ userType }`, { data } )
+    axios.post( `http://localhost:3020/api/v1/user/signup/${ userType }`, { data } )
       .then( resp => {
         dispatch( signupSuccess( resp.data ) );
       } )
@@ -67,7 +67,7 @@ export const signinFailed = ( error ) => {
 export const signin = ( data ) => {
   return dispatch => {
     dispatch( signinStart() );
-    axios.post( `http://localhost:3020/user/signin`, { data } )
+    axios.post( `http://localhost:3020/api/v1/user/signin`, { data } )
       .then( resp => {
         Auth.authenticateUser( JSON.stringify(resp.data ));
         dispatch( signinSuccess( resp.data ) );

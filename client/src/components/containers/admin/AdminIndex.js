@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Row } from "react-bootstrap";
 import { connect } from "react-redux";
-import banner from "../../../assets/images/banner1.jpeg"
 import Banner from './Banner';
 import NewPoll from './poll/NewPoll';
-import { createPoll } from '../../../store/actions/actions_polls';
+import { createPoll, getPoll } from '../../../store/actions/actions_polls';
 
 class AdminIndex extends Component {
   render() {
@@ -21,12 +20,19 @@ class AdminIndex extends Component {
   }
 }
 
+const mapStateToProps = ( state ) => {
+  return {
+    polls: state.polls
+  }
+}
+
 const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
-    createPoll: ( data) => dispatch(createPoll(data))
+    createPoll: ( data, userId, token ) => dispatch( createPoll( data, userId, token ) ),
+    getPoll: () => dispatch(getPoll())
   }
 
   return dispatchToProps;
 }
  
-export default connect( null, mapDispatchToProps)(AdminIndex);
+export default connect( mapStateToProps, mapDispatchToProps)(AdminIndex);

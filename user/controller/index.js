@@ -51,7 +51,7 @@ exports.signup = (req, res) => {
 
 // Handles user account login
 exports.signin = (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body.data;
   const { userType } = req.params;
 
   // check for email and password in the req.body
@@ -126,7 +126,7 @@ exports.createPoll = ( req, res ) => {
   // We destructure @userId and @usertype from request params
   const { userId, userType } = req.params;
   const { user: { _id } } = req;
-  console.log(userId, _id)
+  
   // We destructure @name from request body
   const { name } = req.body;
   // We check for the poll name in the request body. If not proveded, we return the error message
@@ -140,11 +140,17 @@ exports.createPoll = ( req, res ) => {
   /**
    * We make a call to the poll service to create a new poll
    */
-  axios.post( `http://localhost:3030/api/v1/poll/create/${ userId }/${ userType }`, { name } )
-    .then( response => {
-      if ( response.status === 200 ) {
-        res.json( response.data )
-      }
+  fetch( `http://localhost:3030/api/v1/poll/create/${ userId }/${ userType }`, { 
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    },
+    body: JSON.stringify(req.body)
+  } )
+    .then(response => response.json())
+    .then( resp => {
+      res.json( resp );
     } )
     .catch( err => {
       res.json( { error: err.message } );

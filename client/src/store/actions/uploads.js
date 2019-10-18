@@ -1,5 +1,4 @@
 import axios from "axios";
-import FormData from "form-data";
 export const PHOTO_UPLOAD_START = "PHOTO_UPLOAD_START";
 export const PHOTO_UPLOAD_SUCCESS = "PHOTO_UPLOAD_SUCCESS";
 export const PHOTO_UPLOAD_FAILED = "PHOTO_UPLOAD_FAILED";

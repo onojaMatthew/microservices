@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import { upload } from "../../../store/actions/uploads";
@@ -26,7 +26,7 @@ class Settings extends Component {
 
   onSubmit = async ( e ) => {
     e.preventDefault();
-    const { image, caption } = this.state;
+    const { image } = this.state;
     const { upload } = this.props;
     let formData = new FormData();
     formData.append( "image", image );
@@ -41,7 +41,7 @@ class Settings extends Component {
   }
   render() {
     const { title, } = this.props;
-    const { caption, image, success, usertype } = this.state;
+    const { caption, image } = this.state;
 
     return (
       <div className="signupform">
