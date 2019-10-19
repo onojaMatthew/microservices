@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Alert, Button, Col, Row, Spinner } from "react-bootstrap";
-import history from "../../../../helpers/history"
 import avatar from "../../../../assets/images/banner1.jpeg";
 import { userType, isAuthenticated } from "../../../../helpers/authenticate";
 import EditPoll from "./EditPoll";
 
 class PollDetails extends Component {
   state = {
-    isShow: false
+    isShow: false,
+    isActive: false,
   }
 
   toggleIsShow = () => {
@@ -18,6 +18,25 @@ class PollDetails extends Component {
     })
   }
 
+  toggleButton = () => {
+    const { isActive } = this.state;
+    const { polls, match } = this.props;
+    let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
+
+    if ( isActive ) {
+      return <Button variant="info">Enable</Button>
+    } else {
+      return (
+        <Button
+          variant="warning"
+          onClick={( e ) => this.onDisable( selectedPoll._id, e )}
+        >
+          Disable
+       </Button>
+      )
+    }
+  }
+  
   /**
    * Deletes poll from the poll database
    */
@@ -25,7 +44,6 @@ class PollDetails extends Component {
     e.preventDefault();
     const userId = isAuthenticated().user._id;
     const { deletePoll } = this.props;
-    console.log( userId, " onDelete")
     try {
       await deletePoll( pollId, userId )
       window.location.href = "/dashboard/polls";
@@ -42,12 +60,19 @@ class PollDetails extends Component {
 
   renderView = () => {
     const { isShow } = this.state;
-    const { polls: { polls }, match } = this.props;
-    const selectedPoll = polls ? polls.find( poll => poll._id === match.params.pollId ) : null;
+    const { polls, match, tagPoll, createPoll, getPoll } = this.props;
+    let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
     const tag = selectedPoll && selectedPoll.tags.map( tag => tag )
-    console.log( selectedPoll ? selectedPoll.photo : null, " selected poll")
     if ( isShow ) {
-      return <EditPoll tagPoll={this.props.tagPoll}/>
+      return (
+        <EditPoll
+          tagPoll={tagPoll}
+          createPoll={createPoll}
+          polls={polls}
+          getPoll={getPoll}
+          match={match}
+        />
+      )
     } else {
       return (
         <div className="detail">
@@ -55,7 +80,7 @@ class PollDetails extends Component {
           <Row className="justify-content-md-center">
             <Col md={10}>
               <h5>{selectedPoll && selectedPoll.name}</h5>
-              {/* <img src={require({selectedPoll.photo)}} alt="poll" /> */}
+              <img src={avatar} alt="poll" />
               <Row>
 
               </Row>
@@ -88,12 +113,9 @@ class PollDetails extends Component {
                     {this.props.polls.disableLoading === true ? (
                       <Spinner />
                     ) : (
-                      <Button
-                        variant="warning"
-                        onClick={(e) => this.onDisable(selectedPoll._id, e)}
-                      >
-                        Disable
-                      </Button>
+                      <>
+                        {this.toggleButton()}
+                      </>
                     )}
                     
                   </Col>

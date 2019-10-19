@@ -237,9 +237,7 @@ exports.tagsPoll = ( req, res ) => {
   // We destructure @userId and @usertype from request params
   const { pollId, userType, userId } = req.params;
   const { user: { _id } } = req;
-  // We destructure @name from request body
-  let tags;
-  tags = req.body.tags;
+  
   // We check for the poll name in the request body. If not proveded, we return the error message
   if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
   // We check the user type. If it's not admin, return the error message
@@ -257,7 +255,7 @@ exports.tagsPoll = ( req, res ) => {
       "Content-Type": "application/json",
       ACCEPT: "application/json"
     },
-    body: JSON.stringify( tags)
+    body: JSON.stringify( req.body)
   } )
     .then(response => response.json())
     .then( resp => {
@@ -286,7 +284,7 @@ exports.disablePoll = ( req, res ) => {
   } );
 
   /**
-   * We make a call to the poll service to vote the poll with @param pollId
+   * We make a call to the poll service to enable the poll with @param pollId
    */
   fetch( `http://localhost:3030/api/v1/poll/disable/${ userType }/${ pollId }`, {
     method: "PUT",
@@ -295,6 +293,44 @@ exports.disablePoll = ( req, res ) => {
       ACCEPT: "application/json"
     },
   })
+    .then( response => response.json() )
+    .then( resp => {
+      if ( !resp ) return res.status( 400 ).json( { error: "Failed update tags." } )
+      res.json( resp );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+
+
+/**
+ * We make a call to the poll service to enable the poll with @param pollId
+ */
+exports.enablePoll = ( req, res ) => {
+  // We destructure @userId and @usertype from request params
+  const { pollId, userId, userType } = req.params;
+  const { user: { _id } } = req;
+
+  // We check for the poll name in the request body. If not proveded, we return the error message
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
+  // We check the user type. If it's not admin, return the error message
+  if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only admin is allowed for this operation" } );
+  if ( userId !== _id ) return res.status( 400 ).json( {
+    error: "Unknow user ID. Please create an account if you don't have one "
+  } );
+
+  /**
+   * We make a call to the poll service to enable the poll with @param pollId
+   */
+  fetch( `http://localhost:3030/api/v1/poll/enable/${ userType }/${ pollId }`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ACCEPT: "application/json"
+    },
+  } )
     .then( response => response.json() )
     .then( resp => {
       if ( !resp ) return res.status( 400 ).json( { error: "Failed update tags." } )

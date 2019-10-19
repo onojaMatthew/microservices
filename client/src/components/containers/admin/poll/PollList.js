@@ -4,10 +4,6 @@ import { Link } from "react-router-dom";
 import pollposter from "../../../../assets/images/banner1.jpeg";
 
 class PollList extends Component {
-  state = {
-    isDetails: false
-  }
-
 
   render() {
     const { polls: { polls }, match } = this.props;

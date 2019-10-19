@@ -32,6 +32,7 @@ exports.createPoll = ( req, res ) => {
 // Add new tags to the poll with provided ID @pollId
 exports.tags = ( req, res ) => {
   const newObj = req.body;
+  console.log(req.body)
   const { userType, pollId } = req.params;
   // We check for user type. If it is not admin return the error message
   if ( userType !== "admin" ) return res.status( 403 ).json( {
@@ -69,6 +70,33 @@ exports.disablePoll = ( req, res ) => {
   } );
 
   Poll.findByIdAndUpdate( pollId, { $set: { disabled: true } }, { new: true } )
+    .then( poll => {
+      if ( !poll ) return res.status( 400 ).json( {
+        error: "Could not add new tags. Please try again later"
+      } );
+      res.json( poll );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
+ * Set enabled to true for poll with the ID @params pollId
+ */
+exports.enablePoll = ( req, res ) => {
+  const newObj = req.body.tags;
+  const { userType, pollId } = req.params;
+
+  // We check for user type. If it is not admin return the error message
+  if ( userType !== "admin" ) return res.status( 403 ).json( {
+    error: "Only admin is allowed access to this operation"
+  } );
+  if ( !pollId ) return res.status( 400 ).json( {
+    error: "Poll ID is not provided. Please ensure you are authorized for this operation"
+  } );
+
+  Poll.findByIdAndUpdate( pollId, { $set: { disabled: false } }, { new: true } )
     .then( poll => {
       if ( !poll ) return res.status( 400 ).json( {
         error: "Could not add new tags. Please try again later"

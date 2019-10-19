@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import { getPoll, deletePoll, disablePoll, tagPoll } from "../../../../store/actions/actions_polls";
+import { getPoll, deletePoll, disablePoll, tagPoll, createPoll } from "../../../../store/actions/actions_polls";
 import PollList from './PollList';
 import PollDetails from './PollDetails';
 
@@ -13,7 +13,7 @@ class Poll extends Component {
   }
   
   render() {
-    const { polls, match } = this.props;
+    const { polls, match, getPoll } = this.props;
     return (
       <div className="poll">
         
@@ -27,6 +27,8 @@ class Poll extends Component {
                 deletePoll={this.props.deletePoll}
                 disablePoll={this.props.disablePoll}
                 tagPoll={this.props.tagPoll}
+                createPoll={this.props.createPoll}
+                getPoll={getPoll}
               />
             } />
         </Switch>
@@ -46,7 +48,9 @@ const mapDispatchToProps = ( dispatch ) => {
     getPoll: () => dispatch( getPoll() ),
     deletePoll: ( pollId ) => dispatch( deletePoll( pollId ) ),
     disablePoll: ( pollId, userId ) => dispatch( disablePoll( pollId, userId ) ),
-    tagPoll: ( data, pollId ) => dispatch( tagPoll(data, pollId))
+    tagPoll: ( data, userId, pollId ) => dispatch( tagPoll( data, userId, pollId ) ),
+    createPoll: (data, userId, pollId) => dispatch( createPoll(data, userId,  pollId) ),
+    
   }
 
   return dispatchToProps;

@@ -3,7 +3,7 @@ import { Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import Banner from './Banner';
 import NewPoll from './poll/NewPoll';
-import { createPoll, getPoll, uploadPoll } from '../../../store/actions/actions_polls';
+import { createPoll, getPoll, uploadPoll, tagPoll } from '../../../store/actions/actions_polls';
 
 class AdminIndex extends Component {
   render() {
@@ -36,7 +36,8 @@ const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
     createPoll: ( data, userId, token ) => dispatch( createPoll( data, userId, token ) ),
     uploadPoll: ( data) => dispatch(uploadPoll(data)),
-    getPoll: () => dispatch(getPoll())
+    getPoll: () => dispatch( getPoll() ),
+    tagPoll: () => dispatch( tagPoll()), 
   }
 
   return dispatchToProps;

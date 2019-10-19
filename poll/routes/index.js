@@ -7,7 +7,8 @@ const {
   fetchAllPoll,
   uploadPhoto,
   tags,
-  disablePoll
+  disablePoll,
+  enablePoll,
 } = require( "../controller" );
 const upload = require( "../middleware/fileupload" );
 
@@ -18,6 +19,7 @@ router.put( "/create/:userId/:userType/:pollId", createPoll );
 router.put( "/like/:userType/:pollId/:userId/", likePoll );
 router.put( "/tags/:userType/:pollId", tags );
 router.put( "/disable/:userType/:pollId", disablePoll );
+router.put( "/enable/:userType/:pollId", enablePoll );
 router.put( "/vote/:userType/:pollId/:userId", votePoll );
 router.post( "/upload/:userType", upload.single("photo"), uploadPhoto );
 router.delete("/delete/:pollId", deletePoll );

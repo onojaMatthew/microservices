@@ -43,6 +43,14 @@ export const DISABLE_POLL_SUCCESS = "DISABLE_POLL_SUCCESS";
 export const DISABLE_POLL_FAILED = "DISABLE_POLL_FAILED";
 
 /**
+ * Enable acion pe
+ */
+
+export const ENABLE_POLL_START = "ENABLE_POLL_START";
+export const ENABLE_POLL_SUCCESS = "ENABLE_POLL_SUCCESS";
+export const ENABLE_POLL_FAILED = "ENABLE_POLL_FAILED";
+
+/**
  * Upload action type
  */
 export const UPLOAD_POLL_PHOTO_START = "UPLOAD_POLL_PHOTO_START";
@@ -95,6 +103,7 @@ export const createPoll = ( data, userId, pollId ) => {
       .then( response => response.json() )
       .then( data => {
         dispatch( createPollSuccess( data ) );
+        dispatch( getPoll() );
       } )
       .catch( err => {
         dispatch( createPollFailed( err.message ) );
@@ -164,20 +173,22 @@ export const tagPollFailed = ( error ) => {
   }
 }
 
-export const tagPoll = (data, pollId) => {
+export const tagPoll = (data, userId, pollId) => {
   return dispatch => {
     dispatch( tagPollStart() );
-    fetch( `${ BASE_URL }/tags/${ userType() }/${ pollId }`, {
+    fetch( `${ BASE_URL }/tags/${ userType() }/${ pollId }/${userId}`, {
       method: "PUT",
       headers: {
         ACCEPT: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "x-auth-token": isAuthenticated().token
       },
       body: JSON.stringify(data)
     } )
       .then( response => response.json() )
       .then( resp => {
         dispatch( tagPollSuccess( resp ) );
+        dispatch( getPoll() );
       } )
       .catch( err => {
         dispatch( tagPollFailed( err.message ))
@@ -213,13 +224,15 @@ export const likePollFailed = ( error ) => {
         method: "PUT",
         headers: {
           ACCEPT: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-auth-token": isAuthenticated().token
         },
         body: JSON.stringify( data )
       } )
         .then( response => response.json() )
         .then( resp => {
           dispatch( likePollSuccess( resp ) );
+          dispatch( getPoll() );
         } )
         .catch( err => {
           dispatch( likePollFailed( err.message ) );
@@ -255,13 +268,15 @@ export const votePollFailed = ( error ) => {
         method: "PUT",
         headers: {
           ACCEPT: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-auth-token": isAuthenticated().token
         },
         body: JSON.stringify( data )
       } )
         .then( response => response.json() )
         .then( resp => {
           dispatch( votePollSuccess( resp ) );
+          dispatch( getPoll() );
         } )
         .catch( err => {
           dispatch( votePollFailed( err.message ) );
@@ -305,12 +320,58 @@ export const disablePoll = ( pollId ) => {
       .then( response => response.json() )
       .then( resp => {
         dispatch( disablePollSuccess( resp ) );
+        dispatch( getPoll() );
       } )
       .catch( err => {
         dispatch( disablePollFailed( err.message ) );
       });
   }
 }
+
+
+export const enablePollStart = () => {
+  return {
+    type: ENABLE_POLL_START
+  }
+}
+
+export const enablePollSuccess = ( data ) => {
+  return {
+    type: ENABLE_POLL_SUCCESS,
+    data
+  }
+}
+
+export const enablePollFailed = ( error ) => {
+  return {
+    type: ENABLE_POLL_FAILED,
+    error
+  }
+}
+
+export const enablePoll = ( pollId ) => {
+  const userId = isAuthenticated().user._id;
+  return dispatch => {
+    dispatch( enablePollStart() );
+    fetch( `${ BASE_URL }/disable/${ userType() }/${ pollId }/${ userId }`, {
+      method: "PUT",
+      headers: {
+        ACCEPT: "application/json",
+        "Content-Type": "application/json",
+        "x-auth-token": isAuthenticated().token
+      }
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( enablePollSuccess( resp ) );
+        dispatch( getPoll() );
+      } )
+      .catch( err => {
+        dispatch( enablePollFailed( err.message ) );
+      } );
+  }
+}
+
 
 
 export const deletePollStart = () => {
