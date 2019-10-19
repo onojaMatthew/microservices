@@ -52,7 +52,7 @@ exports.signup = (req, res) => {
 // Handles user account login
 exports.signin = (req, res) => {
   const { email, password } = req.body.data;
-  const { userType } = req.params;
+  // const { userType } = req.params;
 
   // check for email and password in the req.body
   if ( !email || !password ) return res.status( 400 ).json( { error: "Email and password are required" } );

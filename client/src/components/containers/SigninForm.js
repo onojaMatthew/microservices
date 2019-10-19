@@ -26,8 +26,8 @@ class SigninForm extends Component {
     let userType;
 
     if ( title.includes( "user" ) ) {
-      userType = "tenant";
-      this.setState( { usertype: "tenant" } );
+      userType = "user";
+      this.setState( { usertype: "user" } );
     } else {
       userType = "admin";
       this.setState({ usertype: "admin" })
@@ -37,10 +37,9 @@ class SigninForm extends Component {
       email,
       password
     }
-    console.log( data )
+    console.log( userType, " de user pe" )
     try {
-      await signin( data, userType );
-      
+      await signin( data, userType );  
     } catch ( err ) { 
       return;
     }
@@ -51,12 +50,12 @@ class SigninForm extends Component {
     const { signin, title, } = this.props;
     const { email, password, success, usertype } = this.state;
 
-    if (success === true && (usertype === "tenant") ) {
+    if (usertype === "user") {
       return <Redirect to="/settings" />;
     }
     
-    if (success === true && usertype === "admin") {
-      return <Redirect to="/dashboard" />;
+    if (usertype === "admin") {
+      return <Redirect to="/dashboard/index" />;
     }
 
     return (

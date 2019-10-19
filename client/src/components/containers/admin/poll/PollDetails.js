@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { Alert, Button, Col, Row, Spinner } from "react-bootstrap";
 import avatar from "../../../../assets/images/banner1.jpeg";
 import { userType, isAuthenticated } from "../../../../helpers/authenticate";
@@ -18,13 +19,38 @@ class PollDetails extends Component {
     })
   }
 
+  async componentDidMount() {
+    const { fetchPoll, match } = this.props; 
+    const pollId = match.params.pollId;
+    try {
+      // await fetchPoll( pollId );
+    } catch(err) {}
+    
+  }
+
+  toggleIsActive = () => {
+    this.setState( ( prevState ) => {
+      return {
+        isActive: !prevState.isActive
+      }
+    })
+  }
+
+
   toggleButton = () => {
     const { isActive } = this.state;
     const { polls, match } = this.props;
     let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
 
-    if ( isActive ) {
-      return <Button variant="info">Enable</Button>
+    if (selectedPoll && selectedPoll.disabled === true) {
+      return (
+        <Button
+          variant="info"
+          onClick={(e) => this.onEnable(selectedPoll._id, e)}
+        >
+          Enable
+        </Button>
+      )
     } else {
       return (
         <Button
@@ -55,8 +81,18 @@ class PollDetails extends Component {
     const { disablePoll } = this.props;
     try {
       await disablePoll( pollId );
-    } catch(err) {}
+    } catch ( err ) { }
+
   }
+
+  onEnable = async ( pollId, e ) => {
+    e.preventDefault();
+    const { enablePoll } = this.props;
+    try {
+      await enablePoll( pollId );
+    } catch ( err ) { }
+    
+  } 
 
   renderView = () => {
     const { isShow } = this.state;
@@ -169,7 +205,7 @@ class PollDetails extends Component {
     }
   }
   render() {
-    
+    console.log( this.state.isActive, " is acti")
     return (
       <div className="mt-5">
         {this.props.polls.disableSuccess === true ? <Alert>Poll successfull disabled</Alert> : null}

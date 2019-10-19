@@ -23,10 +23,20 @@ import {
   DELETE_POLL_START,
   DELETE_POLL_SUCCESS,
   DELETE_POLL_FAILED,
+  ENABLE_POLL_START,
+  ENABLE_POLL_SUCCESS,
+  ENABLE_POLL_FAILED,
+  UPDATE_UPLOAD_POLL_PHOTO_START,
+  UPDATE_UPLOAD_POLL_PHOTO_SUCCESS,
+  UPDATE_UPLOAD_POLL_PHOTO_FAILED,
+  FETCH_POLL_START,
+  FETCH_POLL_SUCCESS,
+  FETCH_POLL_FAILED,
 } from "../actions/actions_polls";
 
 const initialState = {
   polls: [],
+  photo: {},
   createPollSuccess: false,
   createPollLoading: false,
   getPollSuccess: false,
@@ -43,6 +53,12 @@ const initialState = {
   uploadSuccess: false,
   deleteLoading: false,
   deleteSuccess: false,
+  enableLoading: false,
+  enableSuccess: false,
+  photoLoading: false,
+  photoSuccess: false,
+  uploadUpdateLoading: false,
+  uploadUpdateSuccess: false,
   error: {},
 }
 
@@ -105,6 +121,23 @@ const pollReducers = ( state = initialState, action ) => {
         ...state,
         likeLoading: true
       }
+    case FETCH_POLL_START:
+      return {
+        ...state,
+        photoLoading: true
+      }
+    case FETCH_POLL_SUCCESS:
+      return {
+        ...state,
+        photoSuccess: true,
+        photo: action.data
+      }
+    case FETCH_POLL_FAILED:
+      return {
+        ...state,
+        photoLoading: false,
+        error: action.error
+      }
     case LIKE_POLL_SUCCESS:
       return {
         ...state,
@@ -151,6 +184,23 @@ const pollReducers = ( state = initialState, action ) => {
         disableLoading: false,
         error: action.error
       }
+    case ENABLE_POLL_START:
+      return {
+        ...state,
+        enableLoading: true
+      }
+    case ENABLE_POLL_SUCCESS:
+      return {
+        ...state,
+        enableSuccess: true,
+        polls: action.data
+      }
+    case ENABLE_POLL_FAILED:
+      return {
+        ...state,
+        enableLoading: false,
+        error: action.error
+      }
     case UPLOAD_POLL_PHOTO_START:
       return {
         ...state,
@@ -178,6 +228,23 @@ const pollReducers = ( state = initialState, action ) => {
         ...state,
         deleteSuccess: true,
         polls: action.data
+      }
+    case UPDATE_UPLOAD_POLL_PHOTO_START:
+      return {
+        ...state,
+        uploadUpdateLoading: true,
+      }
+    case UPDATE_UPLOAD_POLL_PHOTO_SUCCESS:
+      return {
+        ...state,
+        uploadUpdateSuccess: true,
+        polls: action.data
+      }
+    case UPDATE_UPLOAD_POLL_PHOTO_FAILED:
+      return {
+        ...state,
+        uploadUpdateLoading: false,
+        error: action.error
       }
     case DELETE_POLL_FAILED:
       return {

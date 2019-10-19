@@ -17,10 +17,6 @@ class App extends Component{
     switch ( window.location.pathname ) {
       case "/":
         return this.setState( { title: "Welcome Home" } );
-      case "/admin-signup":
-        return this.setState( { title: "Sign up as admin " } );
-      case "/admin-login":
-        return this.setState( { title: "Log in as admin" } );
       case "/user-signup":
         return this.setState( { title: "Sign up as user" } );
       case "/user-login":
@@ -40,8 +36,6 @@ class App extends Component{
           <Route exact path="/" component={Home} />
           <Route path="/user-signup" component={() => <SignupForm title={title} />} />
           <Route path="/user-login" component={() => <SigninForm title={title} />} />
-          <Route path="/admin-signup" component={() => <SignupForm title={title} />} />
-          <Route path="/admin-login" component={() => <SigninForm title={title} />} />
           <Route path="/settings" component={() => <Settings title={title} />} />
           <Route path="/dashboard" component={Admin} />
           <Route path="/*" component={ErrorPage} />

@@ -9,7 +9,6 @@ class PollList extends Component {
     const { polls: { polls }, match } = this.props;
     const pollData = polls && polls.map( poll => (
       <Col md={4} key={poll._id}>
-        <h3>Poll list</h3>
           <div className="poll-card">
             <div className="poll-image">
               <img src={pollposter} alt="poll" />
@@ -28,6 +27,7 @@ class PollList extends Component {
     
     return (
       <div>
+        <h3>Poll list</h3>
         <Row>
           {pollData}
         </Row>

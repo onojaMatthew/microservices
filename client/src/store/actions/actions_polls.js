@@ -14,6 +14,9 @@ export const GET_POLL_START = "GET_POLL_START";
 export const GET_POLL_SUCCESS = "GET_POLL_SUCCESS";
 export const GET_POLL_FAILED = "GET_POLL_FAILED";
 
+export const FETCH_POLL_START = "FETCH_POLL_START";
+export const FETCH_POLL_SUCCESS = "FETCH_POLL_SUCCESS";
+export const FETCH_POLL_FAILED = "FETCH_POLL_FAILED";
 /**
  * tag action type
  */
@@ -56,6 +59,13 @@ export const ENABLE_POLL_FAILED = "ENABLE_POLL_FAILED";
 export const UPLOAD_POLL_PHOTO_START = "UPLOAD_POLL_PHOTO_START";
 export const UPLOAD_POLL_PHOTO_SUCCESS = "UPLOAD_POLL_PHOTO_SUCCESS";
 export const UPLOAD_POLL_PHOTO_FAILED = "UPLOAD_POLL_PHOTO_FAILED";
+
+/**
+ * update upload action type
+ */
+export const UPDATE_UPLOAD_POLL_PHOTO_START = "UPDATE_UPLOAD_POLL_PHOTO_START";
+export const UPDATE_UPLOAD_POLL_PHOTO_SUCCESS = "UPDATE_UPLOAD_POLL_PHOTO_SUCCESS";
+export const UPDATE_UPLOAD_POLL_PHOTO_FAILED = "UPDATE_UPLOAD_POLL_PHOTO_FAILED";
 
 /**
  * Delete action type
@@ -150,6 +160,48 @@ export const getPoll = () => {
         dispatch( getPollFailed( err.message ) );
       });
   }
+}
+
+/**
+ * Fetching  a single poll photo
+ */
+export const fetchPollStart = () => {
+  return {
+    type: FETCH_POLL_START
+  }
+}
+
+export const fetchPollSuccess = () => {
+  return {
+    type: FETCH_POLL_START
+  }
+}
+
+export const fetchPollFailed = () => {
+  return {
+    type: FETCH_POLL_START
+  }
+}
+
+
+export const fetchPoll = (pollId) => {
+  // return dispatch => {
+  //   dispatch( fetchPollStart() )
+  //   fetch( `${ MAIN_BASE_URL }/photo/${pollId}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       ACCEPT: "application/json"
+  //     }
+  //   } )
+  //     .then( response => response.json() )
+  //     .then( resp => {
+  //       dispatch( fetchPollSuccess( resp ) );
+  //     } )
+  //     .catch( err => {
+  //       dispatch( fetchPollFailed( err.message ) );
+  //     } );
+  // }
 }
 
 
@@ -353,7 +405,7 @@ export const enablePoll = ( pollId ) => {
   const userId = isAuthenticated().user._id;
   return dispatch => {
     dispatch( enablePollStart() );
-    fetch( `${ BASE_URL }/disable/${ userType() }/${ pollId }/${ userId }`, {
+    fetch( `${ BASE_URL }/enable/${ userType() }/${ pollId }/${ userId }`, {
       method: "PUT",
       headers: {
         ACCEPT: "application/json",
@@ -452,5 +504,43 @@ export const uploadPoll = ( data ) => {
       .catch( err => {
         dispatch( uploadPollFailed( err.message ) );
       });
+  }
+}
+
+export const uploadUpdateStart = () => {
+  return {
+    type: UPDATE_UPLOAD_POLL_PHOTO_START
+  }
+}
+
+export const uploadUpdateSuccess = ( data ) => {
+  return {
+    type: UPDATE_UPLOAD_POLL_PHOTO_SUCCESS,
+    data
+  }
+}
+
+export const uploadUpdateFailed = ( error ) => {
+  return {
+    type: UPDATE_UPLOAD_POLL_PHOTO_FAILED,
+    error
+  }
+}
+
+export const uploadUpdate = ( data ) => {
+  const userId = isAuthenticated().user._id;
+  return dispatch => {
+    dispatch( uploadUpdateStart() );
+    fetch( `${ MAIN_BASE_URL }/upload/update${ userType() }`, {
+      method: "PUT",
+      body: data
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( uploadUpdateSuccess( resp ) );
+      } )
+      .catch( err => {
+        dispatch( uploadUpdateFailed( err.message ) );
+      } );
   }
 }

@@ -13,7 +13,7 @@ const pollSchema = new Schema({
     enum: [ "education", "fashion", "music", "sport", "style" ],
     default: "education"
   } ],
-  photo: { type: String },
+  photo: { data: Buffer, ContentType: String },
   disabled: { type: Boolean, default: false },
   createdAt: {
     type: Date,

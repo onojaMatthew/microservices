@@ -1,4 +1,5 @@
-const { Poll } = require("../model");
+const { Poll } = require( "../model" );
+const fs = require( "fs" );
 
 // We create 
 exports.createPoll = ( req, res ) => {
@@ -188,18 +189,34 @@ exports.likePoll = ( req, res ) => {
   
 }
 
+exports.photo = ( req, res, next ) => {
+  const { pollId } = req.params;
+  
+  Poll.findById( { pollId } )
+    .then( poll => {
+      if ( !poll ) return res.status( 400 ).json( { error: "Poll not found" } );
+      res.set( "Content-Type", poll.photo.contentType );
+      return res.json( poll.photo.data );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    })
+  // res.set( "Content-Type", res.post.photo.contentType );
+  // return res.send( req.post.photo.data );
+}
+
 // Upload poll photo
 exports.uploadPhoto = ( req, res) => {
   const { userType } = req.params;
   if ( userType !== "admin" ) return res.status( 403 ).json( {
     error: "Unathorized access. Only admin can delete a poll"
   } );
-  
+  console.log( fs.readFileSync( req.file.path ))
   // Assigned the path to a new constant @photo
   const photo = req.file.path;
-  let poll = new Poll( {
-    photo: photo
-  } )
+  let poll = new Poll();
+  poll.photo.data = fs.readFileSync( req.file.path );
+  poll.photo.contentType = "image/jpg";
   return poll.save()
     .then( poll => {
       if ( !poll ) return res.status( 400 ).json( { error: "File upload failed" } )
@@ -211,12 +228,35 @@ exports.uploadPhoto = ( req, res) => {
     } );
 }
 
+// Update poll photo
+exports.uploadUpdate = ( req, res ) => {
+  const { userType, pollId } = req.params;
+  if ( userType !== "admin" ) return res.status( 403 ).json( {
+    error: "Unathorized access. Only admin can delete a poll"
+  } );
+
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID not provided" } );
+
+  // Assigned the path to a new constant @photo
+  
+  Poll.findByIdAndUpdate( { pollId } )
+    .then( poll => {
+      if ( !poll ) return res.status( 400 ).json( { error: `Poll with the ID ${ pollId } not found` } )
+      poll.photo.data = fs.readFileSync( req.file.path );
+      poll.photo.contentType = "image/jpg";
+      return poll.save();
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    })
+}
+
 // We fetch all poll here
 exports.fetchAllPoll = (req, res) => {
   Poll.find( {} )
     .sort( {createdAt: -1 } )
     .then(poll => {
-      if (!poll) return res.status(400).json({ error: "No records found" });
+      if ( !poll ) return res.status( 400 ).json( { error: "No records found" } );
       res.json(poll);
     })
     .catch(err => {

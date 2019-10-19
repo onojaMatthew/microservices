@@ -17,16 +17,16 @@ class Sidebar extends Component {
         </Row>
         <hr />
         <Row className="justify-content-md-center">
-          <Link to={"/dashboard"}><h5>Dashboard</h5></Link>
+          <Link to={"/dashboard/index"}><h5>Dashboard</h5></Link>
         </Row>
         <Row className="justify-content-md-center">
           <div>
-            <p><Link to={"/dashboard/polls"}>Poll Management</Link></p>
+            <p><Link to={"/dashboard/index/polls"}>Poll Management</Link></p>
           </div>
         </Row>
         <Row className="justify-content-md-center">
           <div>
-            <p><Link to={"/dashboard/users"}>Users Management</Link></p>
+            <p><Link to={"/dashboard/index/users"}>Users Management</Link></p>
           </div>
         </Row>
       </div>

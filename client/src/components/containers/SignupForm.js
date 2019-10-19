@@ -26,8 +26,8 @@ class SignupForm extends Component{
     let userType;
 
     if ( title.includes( "user" ) ) {
-      userType = "tenant";
-      this.setState( { usertype: "tenant" } );
+      userType = "user";
+      this.setState( { usertype: "user" } );
     } else {
       userType = "admin";
       this.setState( { usertype: "admin" } );
@@ -55,7 +55,7 @@ class SignupForm extends Component{
     }
 
     if ( this.props.account.isSignupSuccess === true && usertype === "admin" ) {
-      return ( <Redirect to="/admin-login" /> );
+      return ( <Redirect to="/dashboard/admin-login" /> );
     }
     
     return (
