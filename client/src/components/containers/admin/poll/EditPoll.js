@@ -6,6 +6,9 @@ class EditPoll extends Component {
     return (
       <div>
         <h3>Edit Poll</h3>
+        <Row className="jus">
+          
+        </Row>
       </div>
     )
   }

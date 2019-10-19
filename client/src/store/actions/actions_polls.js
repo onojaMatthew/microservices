@@ -1,4 +1,5 @@
-import { userType } from "../../helpers/authenticate";
+import { userType, isAuthenticated } from "../../helpers/authenticate";
+import history from "../../helpers/history";
 /**
  * Create action type
  */
@@ -79,15 +80,15 @@ export const createPollFailed = ( error ) => {
 }
 
 
-export const createPoll = ( data, userId, token ) => {
+export const createPoll = ( data, userId, pollId ) => {
   return dispatch => {
     dispatch( createPollStart() );
-    fetch( `${ BASE_URL }/create/${ userType() }/${ userId }`, {
-      method: "POST",
+    fetch( `${ BASE_URL }/create/${ userType() }/${ pollId}/${ userId }`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         ACCEPT: "application/json",
-        "x-auth-token": token
+        "x-auth-token": isAuthenticated().token
       },
       body: JSON.stringify( data )
     } )
@@ -289,16 +290,17 @@ export const disablePollFailed = ( error ) => {
   }
 }
 
-export const disablePoll = ( data, pollId, userId, ) => {
+export const disablePoll = ( pollId ) => {
+  const userId = isAuthenticated().user._id;
   return dispatch => {
     dispatch( disablePollStart() );
     fetch( `${ BASE_URL }/disable/${ userType() }/${ pollId }/${ userId }`, {
       method: "PUT",
       headers: {
         ACCEPT: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify( data )
+        "Content-Type": "application/json",
+        "x-auth-token": isAuthenticated().token
+      }
     } )
       .then( response => response.json() )
       .then( resp => {
@@ -331,19 +333,20 @@ export const deletePollFailed = ( error ) => {
   }
 }
 
-export const deletePoll = ( data, pollId, userId, ) => {
+export const deletePoll = ( pollId ) => {
   return dispatch => {
     dispatch( deletePollStart() );
-    fetch( `${ MAIN_BASE_URL }/delete/${ userType() }/${ pollId }`, {
-      method: "PUT",
+    fetch( `${ MAIN_BASE_URL }/delete/${ pollId }`, {
+      method: "DELETE",
       headers: {
         ACCEPT: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify( data )
+        "Content-Type": "application/json",
+        "x-auth-token": isAuthenticated().token
+      }
     } )
       .then( response => response.json() )
       .then( resp => {
+        history.push("/dashboard/polls")
         dispatch( deletePollSuccess( resp ) );
       } )
       .catch( err => {
@@ -373,11 +376,12 @@ export const uploadPollFailed = ( error ) => {
   }
 }
 
-export const uploadPoll = ( data, pollId, userId, ) => {
+export const uploadPoll = ( data ) => {
+  const userId = isAuthenticated().user._id;
   return dispatch => {
     dispatch( uploadPollStart() );
-    fetch( `${ MAIN_BASE_URL }/delete/${ userType() }/${ pollId }`, {
-      method: "PUT",
+    fetch( `${ MAIN_BASE_URL }/upload/${ userType() }`, {
+      method: "POST",
       body: data
     } )
       .then( response => response.json() )

@@ -4,7 +4,7 @@ const fetch = require( "node-fetch" );
 
 // Handles user acount registration
 exports.signup = (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body.data;
   const { userType } = req.params;
 
   if (!email || !password) return res.status(400).json({ error: "Email and password are required for account sign up" });
@@ -124,7 +124,7 @@ exports.signout = (req, res) => {
 
 exports.createPoll = ( req, res ) => {
   // We destructure @userId and @usertype from request params
-  const { userId, userType } = req.params;
+  const { userId, userType, pollId } = req.params;
   const { user: { _id } } = req;
   
   // We destructure @name from request body
@@ -140,8 +140,8 @@ exports.createPoll = ( req, res ) => {
   /**
    * We make a call to the poll service to create a new poll
    */
-  fetch( `http://localhost:3030/api/v1/poll/create/${ userId }/${ userType }`, { 
-    method: "POST",
+  fetch( `http://localhost:3030/api/v1/poll/create/${ userId }/${ userType }/${pollId}`, { 
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       ACCEPT: "application/json"

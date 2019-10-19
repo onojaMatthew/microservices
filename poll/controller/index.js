@@ -3,7 +3,7 @@ const { Poll } = require("../model");
 // We create 
 exports.createPoll = ( req, res ) => {
   // We destructure @userId and @usertype from request params
-  const { userId, userType } = req.params;
+  const { userId, userType, pollId } = req.params;
   // We destructure @name from request body
   const { name } = req.body;
   console.log(name)
@@ -11,7 +11,7 @@ exports.createPoll = ( req, res ) => {
   if ( !name ) return res.status( 400 ).json( { error: "Name is not provided. A poll must have a name" } );
   // We check the user type. If it's not admin, return the error message
   if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only an admin allowed for this operation" });
-  
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
   // We create a new poll here with name provided
   let poll = new Poll({
     name,
@@ -160,28 +160,25 @@ exports.likePoll = ( req, res ) => {
   
 }
 
-// Updates poll photo
-exports.uploadPhoto = ( res, req ) => {
-  console.log(req.params)
-  const { userType, pollId } = req.params;
+// Upload poll photo
+exports.uploadPhoto = ( req, res) => {
+  const { userType } = req.params;
   if ( userType !== "admin" ) return res.status( 403 ).json( {
     error: "Unathorized access. Only admin can delete a poll"
   } );
-  if ( !pollId ) return res.status( 400 ).json( {
-    error: "The id of the discussion to be deleted is required"
-  } );
-
+  
   // Assigned the path to a new constant @photo
   const photo = req.file.path;
-  Poll.findByIdAndUpdate( pollId )
+  let poll = new Poll( {
+    photo: photo
+  } )
+  return poll.save()
     .then( poll => {
-      if ( !poll ) return res.status( 400 ).json( { error: "Poll not found." } )
-      // set the photo field to the file path
-      poll.photo = photo;
-      // save update to the poll model
-      return poll.save();
+      if ( !poll ) return res.status( 400 ).json( { error: "File upload failed" } )
+      res.json( poll );
     } )
     .catch( err => {
+      console.log(err.message)
       res.json( { error: err.message } );
     } );
 }
@@ -189,6 +186,7 @@ exports.uploadPhoto = ( res, req ) => {
 // We fetch all poll here
 exports.fetchAllPoll = (req, res) => {
   Poll.find( {} )
+    .sort( {createdAt: -1 } )
     .then(poll => {
       if (!poll) return res.status(400).json({ error: "No records found" });
       res.json(poll);

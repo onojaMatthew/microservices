@@ -156,6 +156,15 @@ html, body {
   height: 130px;
 }
 
+.poll-detail {
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 1px 1px 3px #333, -1px -1px 3px #333;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
 .detail img {
   width: 100%;
 }

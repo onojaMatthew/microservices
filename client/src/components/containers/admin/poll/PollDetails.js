@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Alert, Button, Col, Row, Spinner } from "react-bootstrap";
+import history from "../../../../helpers/history"
 import avatar from "../../../../assets/images/banner1.jpeg";
-import { userType } from "../../../../helpers/authenticate";
+import { userType, isAuthenticated } from "../../../../helpers/authenticate";
 import EditPoll from "./EditPoll";
 
 class PollDetails extends Component {
@@ -17,29 +18,59 @@ class PollDetails extends Component {
     })
   }
 
+  /**
+   * Deletes poll from the poll database
+   */
+  onDelete = async ( pollId, e ) => {
+    e.preventDefault();
+    const userId = isAuthenticated().user._id;
+    const { deletePoll } = this.props;
+    console.log( userId, " onDelete")
+    try {
+      await deletePoll( pollId, userId )
+      window.location.href = "/dashboard/polls";
+    } catch(err) {}
+  }
+
+  onDisable = async ( pollId, e ) => {
+    e.preventDefault();
+    const { disablePoll } = this.props;
+    try {
+      await disablePoll( pollId );
+    } catch(err) {}
+  }
+
   renderView = () => {
     const { isShow } = this.state;
     const { polls: { polls }, match } = this.props;
-    const selectedPoll = polls && polls.find( poll => poll._id === match.params.pollId );
+    const selectedPoll = polls ? polls.find( poll => poll._id === match.params.pollId ) : null;
     const tag = selectedPoll && selectedPoll.tags.map( tag => tag )
-    console.log( tag )
+    console.log( selectedPoll ? selectedPoll.photo : null, " selected poll")
     if ( isShow ) {
-      return <EditPoll />
+      return <EditPoll tagPoll={this.props.tagPoll}/>
     } else {
       return (
         <div className="detail">
+          
           <Row className="justify-content-md-center">
             <Col md={10}>
-              <img src={avatar} alt="poll" />
-              <Row className="mb-5">
+              <h5>{selectedPoll && selectedPoll.name}</h5>
+              {/* <img src={require({selectedPoll.photo)}} alt="poll" /> */}
+              <Row>
+
+              </Row>
+              <Row className="mb-5 mt-3">
                 <Col md={4}>
-                  <h4>tags: {tag && tag.join( " " )}</h4>
+                  <h6><strong>tags</strong>: {tag && tag.join( " " )}</h6>
+                </Col>
+                <Col md={2}>
+                  <h6><strong>Votes</strong>: {selectedPoll && selectedPoll.votes.length}</h6>
+                </Col>
+                <Col md={2}>
+                  <h6><strong>Likes</strong>: {selectedPoll && selectedPoll.likes.length}</h6>
                 </Col>
                 <Col md={4}>
-                  <h4>Votes: {selectedPoll && selectedPoll.votes.length}</h4>
-                </Col>
-                <Col md={4}>
-                  <h4>Likes: {selectedPoll && selectedPoll.likes.length}</h4>
+                  <h6><strong>Status</strong>: {selectedPoll && selectedPoll.disabled === true ? "Disabled" : "Active"}</h6>
                 </Col>
               </Row>
 
@@ -54,10 +85,27 @@ class PollDetails extends Component {
                     </Button>
                   </Col>
                   <Col md={4}>
-                    <Button variant="warning">Disable</Button>
+                    {this.props.polls.disableLoading === true ? (
+                      <Spinner />
+                    ) : (
+                      <Button
+                        variant="warning"
+                        onClick={(e) => this.onDisable(selectedPoll._id, e)}
+                      >
+                        Disable
+                      </Button>
+                    )}
+                    
                   </Col>
                   <Col md={4}>
-                    <Button variant="danger">Delete</Button>
+                    {this.props.polls.deletePollLoading === true ? <Spinner /> : (
+                      <Button
+                        variant="danger"
+                        onClick={(e) => this.onDelete(selectedPoll._id, e)}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               ) : (
@@ -74,8 +122,8 @@ class PollDetails extends Component {
 
               <Row className="mb-5 mt-5">
                 <Col md={12}>
-                  <form class="form-inline">
-                    <div class="form-group mx-sm-3 mb-2">
+                  <form className="form-inline">
+                    <div className="form-group mx-sm-3 mb-2">
                       <input type="text" className="form-control" placeholder="Comment" />
                     </div>
                     <button className="btn btn-info mb-2">Post Comment</button>
@@ -102,6 +150,7 @@ class PollDetails extends Component {
     
     return (
       <div className="mt-5">
+        {this.props.polls.disableSuccess === true ? <Alert>Poll successfull disabled</Alert> : null}
         {this.renderView()}
       </div>
     );

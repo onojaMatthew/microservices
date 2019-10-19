@@ -3,17 +3,23 @@ import { Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import Banner from './Banner';
 import NewPoll from './poll/NewPoll';
-import { createPoll, getPoll } from '../../../store/actions/actions_polls';
+import { createPoll, getPoll, uploadPoll } from '../../../store/actions/actions_polls';
 
 class AdminIndex extends Component {
   render() {
-    const { createPoll } = this.props;
+    const { createPoll, uploadPoll, getPoll } = this.props;
+    console.log( this.props.polls, " from index admin")
     return (
       <div>
         <Banner />
         <hr />
         <Row className="justify-content-md-center">
-          <NewPoll createPoll={createPoll} />
+          <NewPoll
+            createPoll={createPoll}
+            uploadPoll={uploadPoll}
+            getPoll={getPoll}
+            polls={this.props.polls}
+          />
         </Row>
       </div>
     );
@@ -29,6 +35,7 @@ const mapStateToProps = ( state ) => {
 const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
     createPoll: ( data, userId, token ) => dispatch( createPoll( data, userId, token ) ),
+    uploadPoll: ( data) => dispatch(uploadPoll(data)),
     getPoll: () => dispatch(getPoll())
   }
 

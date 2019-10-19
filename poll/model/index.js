@@ -5,7 +5,6 @@ const pollSchema = new Schema({
   
   name: {
     type: String,
-    required: [ true, "Please provide the name of the author" ]
   },
   votes: [ { type: ObjectId, ref: "User" } ],
   likes: [ { type: ObjectId, ref: "User" }],
@@ -22,7 +21,7 @@ const pollSchema = new Schema({
   }
 });
 
-pollSchema.index( { name: 1 }, { unique: true } );
+// pollSchema.index( { name: 1 }, { unique: true } );
 
 const Poll = mongoose.model("Poll", pollSchema);
 

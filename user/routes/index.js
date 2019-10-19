@@ -20,12 +20,12 @@ router.post('/signup/:userType', signup);
 router.post("/signin", signin);
 router.get( '/signout', signout );
 router.get( "/all", fetchAllUsers );
-router.post( "/create/:userType/:userId", requireLogin, createPoll );
+router.put( "/create/:userType/:pollId/:userId", requireLogin, createPoll );
 router.put( "/disable/:userType/:pollId/:userId", requireLogin, disablePoll );
 router.put( "/like/:userType/:pollId/:userId", requireLogin, likePoll );
 router.put( "/vote/:userType/:pollId/:userId", requireLogin, votePoll );
 router.put( "/tags/:userType/:pollId/:userId", requireLogin, tagsPoll );
-router.put( "/upload/:userType/:pollId/:userId", requireLogin, uploadPhoto );
+router.post( "/upload/:userType/:userId", requireLogin, uploadPhoto );
 router.delete( "/delete_user/:userId", userDelete );
 router.delete( "/delete/:pollId", requireLogin, deletePoll );
 
