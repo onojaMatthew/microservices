@@ -72,7 +72,7 @@ class PollDetails extends Component {
     const { deletePoll } = this.props;
     try {
       await deletePoll( pollId, userId )
-      window.location.href = "/dashboard/polls";
+      window.location.href = "/dashboard/index/polls";
     } catch(err) {}
   }
 

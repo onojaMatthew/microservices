@@ -19,7 +19,7 @@ class AdminHome extends Component {
             <Switch>
               <Route exact path={`${ match.url }`} component={AdminIndex} />
               <Route path={`${ match.url }/polls`} component={Poll} />
-              <Route path={`${ match.url }/users`} component={Users} />
+              <Route path={`${ match.url }/users`} component={(props) => <Users {...props}/>} />
               <Route path={"/"} component={""} />
             </Switch>
           </Col>

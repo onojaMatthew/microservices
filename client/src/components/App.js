@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import SignupForm from './containers/SignupForm';
 import Header from './Header';
-import Home from './contents/Home';
+import Home from './containers/user/Home';
 import ErrorPage from './contents/404';
 import SigninForm from './containers/SigninForm';
-import Settings from './containers/customer/Settings';
 import Admin from './containers/admin/Admin';
+import Polls from './containers/user/Polls';
+import PollDetails from './containers/user/PollDetails';
 
 class App extends Component{
   state = {
@@ -27,16 +29,18 @@ class App extends Component{
         return this.state.title;
     }
   }
+  
   render() {
     const { title } = this.state;
     return (
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={(props) => <Home {...props}/>} />
           <Route path="/user-signup" component={() => <SignupForm title={title} />} />
           <Route path="/user-login" component={() => <SigninForm title={title} />} />
-          <Route path="/settings" component={() => <Settings title={title} />} />
+          <Route exact path="/polls" component={( props ) => <Polls {...props} />} />
+          <Route path="/polls/:pollId" component={PollDetails} />
           <Route path="/dashboard" component={Admin} />
           <Route path="/*" component={ErrorPage} />
         </Switch>
@@ -44,7 +48,6 @@ class App extends Component{
     );
   }
 }
-
 
 export default App;
  

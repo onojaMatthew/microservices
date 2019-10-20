@@ -7,27 +7,24 @@ exports.createPoll = ( req, res ) => {
   const { userId, userType, pollId } = req.params;
   // We destructure @name from request body
   const { name } = req.body;
-  console.log(name)
   // We check for the poll name in the request body. If not proveded, we return the error message
   if ( !name ) return res.status( 400 ).json( { error: "Name is not provided. A poll must have a name" } );
   // We check the user type. If it's not admin, return the error message
   if ( userType !== "admin" ) return res.status( 400 ).json( { error: "Only an admin allowed for this operation" });
   if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided." } );
   // We create a new poll here with name provided
-  let poll = new Poll({
-    name,
-    createdBy: userId
-  });
-  return poll.save()
-    .then( result => {
-      
-      // We check if the promise @result was returned. If not return the error message
-      if ( !result ) return res.status( 400 ).json( { error: "Can not create new poll. Please try again" });
-      res.json(result);
-    })
-    .catch(err => {
-      res.json(err.message);
-    });
+  Poll.findByIdAndUpdate( { _id: pollId } )
+    .then( poll => {
+      if ( !poll ) return res.status( 400 ).json( { error: "Poll not found" } );
+      poll.name = name;
+      return poll.save( ( err, data ) => {
+        if ( err || !data ) return res.status( 400 ).json( { error: err.message } );
+        res.json( data );
+      });
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
 }
 
 // Add new tags to the poll with provided ID @pollId
@@ -201,8 +198,6 @@ exports.photo = ( req, res, next ) => {
     .catch( err => {
       res.json( { error: err.message } );
     })
-  // res.set( "Content-Type", res.post.photo.contentType );
-  // return res.send( req.post.photo.data );
 }
 
 // Upload poll photo
@@ -239,7 +234,7 @@ exports.uploadUpdate = ( req, res ) => {
 
   // Assigned the path to a new constant @photo
   
-  Poll.findByIdAndUpdate( { pollId } )
+  Poll.findByIdAndUpdate( { _id: pollId } )
     .then( poll => {
       if ( !poll ) return res.status( 400 ).json( { error: `Poll with the ID ${ pollId } not found` } )
       poll.photo.data = fs.readFileSync( req.file.path );

@@ -39,23 +39,21 @@ class SignupForm extends Component{
     }
     try {
       await signup( data, userType );
-    } catch ( err ) {
-      return;
-    }
+    } catch ( err ) {}
 
-    this.setState( { success: this.props.account.isSignupSuccess } );
+    
   }
   
   render() {
     const { signup, title } = this.props;
     const { email, password, success, usertype } = this.state;
-    console.log(this.props.account.isSignupSuccess, " props for signup", success)
-    if ( this.props.account.isSignupSuccess === true && usertype === "tenant" ) {
+    
+    if (usertype === "user" ) {
       return (<Redirect to="/user-login" />);
     }
 
-    if ( this.props.account.isSignupSuccess === true && usertype === "admin" ) {
-      return ( <Redirect to="/dashboard/admin-login" /> );
+    if (usertype === "admin" ) {
+      return ( <Redirect to="/dashboard/login" /> );
     }
     
     return (

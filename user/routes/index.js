@@ -28,7 +28,7 @@ router.put( "/like/:userType/:pollId/:userId", requireLogin, likePoll );
 router.put( "/vote/:userType/:pollId/:userId", requireLogin, votePoll );
 router.put( "/tags/:userType/:pollId/:userId", requireLogin, tagsPoll );
 router.post( "/upload/:userType/:userId", requireLogin, uploadPhoto );
-router.delete( "/delete_user/:userId", userDelete );
+router.delete( "/delete/:userId/:userType", requireLogin, userDelete );
 router.delete( "/delete/:pollId", requireLogin, deletePoll );
 
 module.exports = router;

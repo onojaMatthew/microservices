@@ -51,7 +51,7 @@ class SigninForm extends Component {
     const { email, password, success, usertype } = this.state;
 
     if (usertype === "user") {
-      return <Redirect to="/settings" />;
+      return <Redirect to="/" />;
     }
     
     if (usertype === "admin") {

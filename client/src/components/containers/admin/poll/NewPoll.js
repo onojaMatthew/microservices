@@ -12,7 +12,7 @@ class NewPoll extends Component {
   async componentDidMount() {
     const { getPoll } = this.props;
     try {
-      await getPoll()
+      await getPoll();
     }catch(err) {}
   }
   onSubmit = async ( e ) => {

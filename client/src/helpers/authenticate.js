@@ -14,6 +14,12 @@ export const isAuthenticated = () => {
  * Get the userType from localStorage
  */
 export const userType = () => {
-  const userType = isAuthenticated().user.userType;
-  return userType;
+  if ( typeof window === "undefined" ) {
+    return false;
+  }
+
+  if ( localStorage.getItem( "token" ) ) {
+    const userType = isAuthenticated().user.userType;
+    return userType;
+  }
 }

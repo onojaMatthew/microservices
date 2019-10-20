@@ -100,8 +100,10 @@ exports.fetchAllUsers = ( req, res ) => {
  * Deletes user with the ID @param userId
  */
 exports.userDelete = ( req, res ) => {
-  const { userId } = req.params;
-  console.log(userId)
+  const { userId, userType } = req.params;
+  console.log(userId, userType)
+  if ( !userId ) return res.status( 400 ).json( { error: "User ID not provided" } );
+  if ( !userType ) return res.status( 400 ).json( { error: "Only admin is allowed to delete a user"})
   User.findByIdAndDelete( {_id: userId} )
     .then( user => {
       if ( !user ) return res.status( 400 ).json( {

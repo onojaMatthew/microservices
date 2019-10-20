@@ -17,15 +17,13 @@ const Header = () => {
               <NavDropdown.Item href="/dashboard/login">Login as admin</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
-          ) : null}
-          {userType() === "user" ? (
+          ) : (
             <NavDropdown title="Account" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/user-signup">Sign up as user</NavDropdown.Item>
               <NavDropdown.Item href="/user-login">Login as user</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
-          ) : null}
-         
+          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

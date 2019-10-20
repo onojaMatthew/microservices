@@ -1,4 +1,5 @@
 import axios from "axios";
+import { userType } from "../../helpers/authenticate";
 import Auth from "../../helpers/Auth";
 export const SIGNUP_START = "SIGNUP_START";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
@@ -10,9 +11,9 @@ export const SIGNIN_FAILED = "SIGNIN_FAILED";
 export const GET_USERS_START = "GET_USERS_START";
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const GET_USERS_FAILED = "GET_USERS_FAILED";
-export const DELETE_USERS_START = "DELETE_USERS_START";
-export const DELETE_USERS_SUCCESS = "DELETE_USERS_SUCCESS";
-export const DELETE_USERS_START = "DELETE_USERS_START";
+export const DELETE_USER_START = "DELETE_USERS_START";
+export const DELETE_USER_SUCCESS = "DELETE_USERS_SUCCESS";
+export const DELETE_USER_FAILED = "DELETE_USERS_FAILED";
 
 
 export const signupStart = () => {
@@ -120,30 +121,30 @@ export const getUsers = ( data, userType ) => {
 }
 
 
-export const getUserStart = () => {
+export const deleteUserStart = () => {
   return {
-    type: DElETE_USERS_START
+    type: DELETE_USER_START
   }
 }
 
 export const deleteUserSuccess = ( data ) => {
   return {
-    type: DELETE_USERS_SUCCESS,
+    type: DELETE_USER_SUCCESS,
     data
   }
 }
 
 export const deleteUserFailed = ( error ) => {
   return {
-    type: DELETE_USERS_FAILED,
+    type: DELETE_USER_FAILED,
     error
   }
 }
 
-export const deleteUser = (userType, userId) => {
+export const deleteUser = (userId) => {
   return dispatch => {
     dispatch( deleteUserStart() );
-    axios.get( `http://localhost:3020/api/v1/user/all`)
+    axios.delete( `http://localhost:3020/api/v1/user/delete/${userId}/${userType()}`)
       .then( resp => {
         dispatch( deleteUserSuccess( resp.data ) );
       } )

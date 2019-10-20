@@ -7,10 +7,10 @@ import {
   SIGNIN_FAILED,
   GET_USERS_START,
   GET_USERS_SUCCESS,
-  GET_USERS_FAIlED,
-  DELETE_USERS_START,
-  DELETE_USERS_SUCCESS,
-  DELETE_USERS_START,
+  GET_USERS_FAILED,
+  DELETE_USER_START,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAILED,
 } from "../actions/actions_signup";
 
 const initialState = {
@@ -80,18 +80,18 @@ const signupReducers = ( state = initialState, action ) => {
         getUserLoading: false,
         error: action.error
       }
-    case DELETE_USERS_START:
+    case DELETE_USER_START:
       return {
         ...state,
         deleteUserLoading: true
       }
-    case DELETE_USERS_SUCCESS:
+    case DELETE_USER_SUCCESS:
       return {
         ...state,
         deleteUserSuccess: true,
         user: action.data
       }
-    case DELETE_USERS_START:
+    case DELETE_USER_FAILED:
       return {
         ...state,
         deleteUserLoading: false,
