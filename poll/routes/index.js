@@ -11,6 +11,7 @@ const {
   enablePoll,
   uploadUpdate,
   photo,
+  postComment,
 } = require( "../controller" );
 const upload = require( "../middleware/fileupload" );
 
@@ -23,11 +24,10 @@ router.put( "/tags/:userType/:pollId", tags );
 router.put( "/disable/:userType/:pollId", disablePoll );
 router.get("/photo/:pollId", photo)
 router.put( "/enable/:userType/:pollId", enablePoll );
+router.put( "/comment/:pollId/:userType/:userId", postComment );
 router.put( "/vote/:userType/:pollId/:userId", votePoll );
 router.post( "/upload/:userType", upload.single( "photo" ), uploadPhoto );
 router.put( "/upload/update/:userType/:pollId", upload.single( "photo" ), uploadUpdate );
 router.delete("/delete/:pollId", deletePoll );
 
 module.exports = router;
-
-// 5da7275923ee4a1088eeaf9b

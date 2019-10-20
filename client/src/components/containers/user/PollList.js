@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import avatar from "../../../assets/images/banner1.jpeg";
+import Auth from "../../../helpers/Auth";
 import { isAuthenticated } from "../../../helpers/authenticate";
 
 const token = isAuthenticated().token;
@@ -16,13 +17,13 @@ const PollList = ( { polls: { polls }, match, } ) => {
         <hr />
         <p className="lead">{poll.name}</p>
         <p className="view">
-          {/* {token ? ( */}
+          {Auth.isUserAuthenticated() ? (
             <Link to={`/polls/${ poll._id }`} style={{ textDecoration: "none" }}>
               View details
             </Link>
-          {/* ): (
+          ): (
             <Redirect to={"/user-login"} />
-          )} */}
+          )}
         </p>
       </div>
     </Col>

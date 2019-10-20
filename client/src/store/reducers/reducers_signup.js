@@ -11,6 +11,10 @@ import {
   DELETE_USER_START,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAILED,
+  LOGOUT_START,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILED,
+
 } from "../actions/actions_signup";
 
 const initialState = {
@@ -24,6 +28,8 @@ const initialState = {
   getUserSuccess: false,
   deleteUserLoading: false,
   deleteUserSuccess: false,
+  logoutLoading: false,
+  logoutSuccess: false,
   error: ""
 }
 
@@ -95,6 +101,23 @@ const signupReducers = ( state = initialState, action ) => {
       return {
         ...state,
         deleteUserLoading: false,
+        error: action.error
+      }
+    case LOGOUT_START:
+      return{
+        ...state,
+        logoutLoading: true
+      }
+    case LOGOUT_SUCCESS:
+      return{
+        ...state,
+        logoutSuccess: true,
+        users: action.data
+      }
+    case LOGOUT_FAILED:
+      return{
+        ...state,
+        logouLoading: false,
         error: action.error
       }
     default:

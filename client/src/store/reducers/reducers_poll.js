@@ -32,6 +32,9 @@ import {
   FETCH_POLL_START,
   FETCH_POLL_SUCCESS,
   FETCH_POLL_FAILED,
+  POST_COMMENT_START,
+  POST_COMMENT_SUCCESS,
+  POST_COMMENT_FAILED,
 } from "../actions/actions_polls";
 
 const initialState = {
@@ -59,6 +62,8 @@ const initialState = {
   photoSuccess: false,
   uploadUpdateLoading: false,
   uploadUpdateSuccess: false,
+  commentLoading: false,
+  commentSuccess: false,
   error: {},
 }
 
@@ -250,6 +255,23 @@ const pollReducers = ( state = initialState, action ) => {
       return {
         ...state,
         deleteLoading: false,
+        error: action.error
+      }
+    case POST_COMMENT_START:
+      return {
+        ...state,
+        commentLoading: true
+      }
+    case POST_COMMENT_SUCCESS:
+      return {
+        ...state,
+        commentSuccess: true,
+        polls: action.data
+      }
+    case POST_COMMENT_FAILED:
+      return {
+        ...state,
+        commentLoading: false,
         error: action.error
       }
     default:

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import Signup from "../contents/Signup";
 import { Row, Col } from "react-bootstrap";
 import { signup } from "../../store/actions/actions_signup";
@@ -9,6 +8,8 @@ class SignupForm extends Component{
   state = {
     email: "",
     password: "",
+    firstName: "",
+    lastName: "",
     usertype: "",
     success: false,
   }
@@ -46,14 +47,14 @@ class SignupForm extends Component{
   
   render() {
     const { signup, title } = this.props;
-    const { email, password, success, usertype } = this.state;
+    const { email, password, firstName, lastName, usertype } = this.state;
     
     if (usertype === "user" ) {
-      return (<Redirect to="/user-login" />);
+      window.location.href = "/user-login";
     }
 
     if (usertype === "admin" ) {
-      return ( <Redirect to="/dashboard/login" /> );
+      window.location.href = "/dashboard/login";
     }
     
     return (
@@ -65,6 +66,8 @@ class SignupForm extends Component{
               signup={signup}
               title={title}
               email={email}
+              firstName={firstName}
+              lastName={lastName}
               password={password}
               onSubmit={this.onSubmit}
               handleChange={this.handleChange}

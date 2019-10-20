@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Form, Button, Row, Col, Spinner } from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
 
 const NewPollForm = ( { onSubmit, onFileChange, handleChange, name, photo, polls, uploadMessage } ) => {
   console.log( polls, " uploading")

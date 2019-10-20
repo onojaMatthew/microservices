@@ -1,5 +1,4 @@
 import { userType, isAuthenticated } from "../../helpers/authenticate";
-import history from "../../helpers/history";
 /**
  * Create action type
  */
@@ -73,6 +72,10 @@ export const UPDATE_UPLOAD_POLL_PHOTO_FAILED = "UPDATE_UPLOAD_POLL_PHOTO_FAILED"
 export const DELETE_POLL_START = "DELETE_POLL_START";
 export const DELETE_POLL_SUCCESS = "DELETE_POLL_SUCCESS";
 export const DELETE_POLL_FAILED = "DELETE_POLL_FAILED";
+
+export const POST_COMMENT_START = "POST_COMMENT_START"
+export const POST_COMMENT_SUCCESS = "POST_COMMENT_SUCCESS"
+export const POST_COMMENT_FAILED = "POST_COMMENT_FAILED"
 
 const BASE_URL = "http://localhost:3020/api/v1/user";
 const MAIN_BASE_URL = "http://localhost:3030/api/v1/poll";
@@ -194,7 +197,7 @@ export const fetchPoll = (pollId) => {
   //       ACCEPT: "application/json"
   //     }
   //   } )
-  //     .then( response => response.json() )
+  //     .then( response => response.json() 
   //     .then( resp => {
   //       dispatch( fetchPollSuccess( resp ) );
   //     } )
@@ -269,7 +272,8 @@ export const likePollFailed = ( error ) => {
   }
 }
 
-  export const likePoll = ( data,pollId, userId,  ) => {
+export const likePoll = ( pollId ) => {
+  const userId = isAuthenticated().user._id;
     return dispatch => {
       dispatch( likePollStart() );
       fetch( `${ BASE_URL }/like/${ userType() }/${ pollId }/${userId}`, {
@@ -278,8 +282,7 @@ export const likePollFailed = ( error ) => {
           ACCEPT: "application/json",
           "Content-Type": "application/json",
           "x-auth-token": isAuthenticated().token
-        },
-        body: JSON.stringify( data )
+        }
       } )
         .then( response => response.json() )
         .then( resp => {
@@ -292,6 +295,51 @@ export const likePollFailed = ( error ) => {
   }
 }
 
+
+export const postCommentStart = () => {
+  return {
+    type: POST_COMMENT_START
+  }
+}
+
+export const postCommentSuccess = (data) => {
+  return {
+    type: POST_COMMENT_SUCCESS,
+    data
+  }
+}
+
+export const postCommentFailed = (error) => {
+  return {
+    type: POST_COMMENT_FAILED,
+    error
+  }
+}
+
+export const postComment = ( data, pollId ) => {
+  const userId = isAuthenticated().user._id;
+  return dispatch => {
+    dispatch( postCommentStart() )
+    fetch( `${ MAIN_BASE_URL }/comment/${ pollId }/${ userType() }/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ACCEPT: "application/json",
+        "x-auth-token": isAuthenticated().token
+      },
+      body: JSON.stringify( data )
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( postCommentSuccess( resp ) )
+        dispatch( getPoll() );
+      } )
+      .catch( err => {
+        dispatch( postCommentFailed( err.message ) );
+      } );
+  }
+  
+}
 
 export const votePollStart = () => {
   return {
@@ -313,7 +361,8 @@ export const votePollFailed = ( error ) => {
   }
 }
 
-  export const votePoll = ( data, pollId, userId, ) => {
+export const votePoll = ( pollId ) => {
+  const userId = isAuthenticated().user._id;
     return dispatch => {
       dispatch( votePollStart() );
       fetch( `${ BASE_URL }/vote/${ userType() }/${ pollId }/${ userId }`, {
@@ -322,8 +371,7 @@ export const votePollFailed = ( error ) => {
           ACCEPT: "application/json",
           "Content-Type": "application/json",
           "x-auth-token": isAuthenticated().token
-        },
-        body: JSON.stringify( data )
+        }
       } )
         .then( response => response.json() )
         .then( resp => {
@@ -459,7 +507,6 @@ export const deletePoll = ( pollId ) => {
     } )
       .then( response => response.json() )
       .then( resp => {
-        history.push("/dashboard/polls")
         dispatch( deletePollSuccess( resp ) );
       } )
       .catch( err => {
@@ -467,6 +514,7 @@ export const deletePoll = ( pollId ) => {
       });
   }
 }
+
 
 
 export const uploadPollStart = () => {

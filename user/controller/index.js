@@ -4,7 +4,7 @@ const fetch = require( "node-fetch" );
 
 // Handles user acount registration
 exports.signup = (req, res) => {
-  const { email, password } = req.body.data;
+  const { email, password, firstName, lastName } = req.body.data;
   const { userType } = req.params;
 
   if (!email || !password) return res.status(400).json({ error: "Email and password are required for account sign up" });
@@ -31,6 +31,8 @@ exports.signup = (req, res) => {
 
           // save the new user to the user model
           let newUser = new User( {
+            firstName,
+            lastName,
             email,
             password: hashedPassword,
             userType: user_type,
@@ -225,7 +227,8 @@ exports.votePoll = ( req, res ) => {
   } )
     .then(response => response.json())
     .then( resp => {
-      if ( !resp ) return res.status( 400 ).json( { error: "Vote failed. Try again"})
+      if ( !resp ) return res.status( 400 ).json( { error: "Vote failed. Try again" } );
+      res.json( resp );
     } )
     .catch( err => {
       res.json( { error: err.message } );

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Form, Spinner } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import avatar from "../../../../assets/images/banner1.jpeg";
-import { userType, isAuthenticated } from "../../../../helpers/authenticate";
+import { isAuthenticated } from "../../../../helpers/authenticate";
 
 class UserDetails extends Component {
 

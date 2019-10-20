@@ -35,8 +35,7 @@ html, body {
   }
 }
 .signupform {
-  background-color: gray;
-  height: 100vh;
+  
   opacity: 1;
   padding-top: 150px;
   box-sizing: border-box;
@@ -44,7 +43,6 @@ html, body {
 
 @media only screen and (max-with: 480px) {
   .signupform {
-    background-color: gray;
     height: 97vh;
     opacity: 1;
     padding-top: 100px;

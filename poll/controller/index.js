@@ -53,6 +53,33 @@ exports.tags = ( req, res ) => {
 }
 
 /**
+ * post comment 
+ */
+exports.postComment = ( req, res ) => {
+  const { comment, firstName, lastName } = req.body;
+  const { pollId, userType, userId } = req.params;
+  // if ( !comment || !firstName || !lastName ) return res.status( 400 ).json( { error: "Incomplete data" } );
+  if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided" } );
+  if ( userType !== "user" ) return res.status( 400 ).json( { error: "Only users are allowed to post commente" } );
+  const newData = {
+    comment,
+    firstName,
+    lastName,
+    createdBy: userId
+  }
+
+  Poll.findByIdAndUpdate( { _id: pollId }, { $push: { comment: newData } }, { new: true } )
+    .then( poll => {
+      if ( !poll ) return res.status( 400 ).json( { error: "Could not update data." } );
+      res.json( poll );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+
+/**
  * Set disabled to true for poll with the ID @params pollId
  */
 exports.disablePoll = ( req, res ) => {

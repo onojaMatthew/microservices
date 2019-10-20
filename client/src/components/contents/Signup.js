@@ -2,9 +2,9 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 import avatar from "../../assets/images/signup.jpeg";
 
-function Signup({ email, password, title, onSubmit, handleChange }) {
+function Signup({ firstName, lastName, email, password, title, onSubmit, handleChange }) {
   return (
-    <div className="signup">
+    <div className="signup mb-5">
       <Form>
         <div className="box-center">
           <img
@@ -17,6 +17,29 @@ function Signup({ email, password, title, onSubmit, handleChange }) {
           marginTop: 10,
           marginBottom: 10
         }}>{title}</h4>
+
+        <Form.Group>
+          <Form.Label>First name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="First name"
+            className="form-control"
+            value={firstName}
+            onChange={( e ) => handleChange( "firstName", e )}
+          />
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Last name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Last name"
+            className="form-control"
+            value={lastName}
+            onChange={( e ) => handleChange( "lastName", e )}
+          />
+        </Form.Group>
+
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -28,7 +51,7 @@ function Signup({ email, password, title, onSubmit, handleChange }) {
           />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
-        </Form.Text>
+          </Form.Text>
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">

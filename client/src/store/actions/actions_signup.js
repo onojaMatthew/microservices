@@ -15,6 +15,9 @@ export const DELETE_USER_START = "DELETE_USERS_START";
 export const DELETE_USER_SUCCESS = "DELETE_USERS_SUCCESS";
 export const DELETE_USER_FAILED = "DELETE_USERS_FAILED";
 
+export const LOGOUT_START = "LOGOUT_START";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const LOGOUT_FAILED = "LOGOUT_FAILED";
 
 export const signupStart = () => {
   return {
@@ -150,6 +153,48 @@ export const deleteUser = (userId) => {
       } )
       .catch( err => {
         dispatch( getUsersFailed( err.message ) );
+      } );
+  }
+}
+
+
+export const logoutStart = () => {
+  return {
+    type: LOGOUT_START
+  }
+}
+
+export const logoutSuccess = ( data ) => {
+  return {
+    type: LOGOUT_SUCCESS,
+    data
+  }
+}
+
+export const logoutFailed = ( error ) => {
+  return {
+    type: LOGOUT_FAILED,
+    error
+  }
+}
+
+export const logout = () => {
+  console.log("inside logou")
+  return dispatch => {
+    dispatch( logoutStart() );
+    fetch( `http://localhost:3020/api/v1/user/signout`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "ACCEPT": "application/json"
+      }
+    } )
+      .then( response => response.json() )
+      .then( resp => {
+        dispatch( logoutSuccess( resp ) )
+      } )
+      .catch( err => {
+        dispatch( logoutFailed( err.message ) );
       } );
   }
 }

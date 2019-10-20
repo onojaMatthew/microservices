@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import { Alert, Button, Col, Row, Spinner } from "react-bootstrap";
 import avatar from "../../../../assets/images/banner1.jpeg";
 import { userType, isAuthenticated } from "../../../../helpers/authenticate";
@@ -20,8 +19,8 @@ class PollDetails extends Component {
   }
 
   async componentDidMount() {
-    const { fetchPoll, match } = this.props; 
-    const pollId = match.params.pollId;
+    // const { fetchPoll, match } = this.props; 
+    // const pollId = match.params.pollId;
     try {
       // await fetchPoll( pollId );
     } catch(err) {}
@@ -38,7 +37,6 @@ class PollDetails extends Component {
 
 
   toggleButton = () => {
-    const { isActive } = this.state;
     const { polls, match } = this.props;
     let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
 
@@ -98,6 +96,14 @@ class PollDetails extends Component {
     const { isShow } = this.state;
     const { polls, match, tagPoll, createPoll, getPoll } = this.props;
     let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
+
+    const comments = selectedPoll && selectedPoll.comment && selectedPoll.comment.map( comment => (
+      <div key={comment._id}>
+        <hr />
+        <p><strong>Name</strong>: {comment.firstName} {comment.lastName}</p>
+        <p>{comment.comment}</p>
+      </div>
+    ) );
     const tag = selectedPoll && selectedPoll.tags.map( tag => tag )
     if ( isShow ) {
       return (
@@ -193,8 +199,7 @@ class PollDetails extends Component {
 
                 <Col>
                   <h5>Comments</h5>
-                  <p><strong>User name</strong></p>
-                  <p>Some message go here for poll</p>
+                  {comments}
                 </Col>
 
               </Row>

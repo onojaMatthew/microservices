@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { Route, BrowserRouter, Switch } from "react-router-dom";
+import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import SignupForm from './containers/SignupForm';
 import Header from './Header';
 import Home from './containers/user/Home';
@@ -8,7 +7,23 @@ import ErrorPage from './contents/404';
 import SigninForm from './containers/SigninForm';
 import Admin from './containers/admin/Admin';
 import Polls from './containers/user/Polls';
-import PollDetails from './containers/user/PollDetails';
+import Auth from "../helpers/Auth";
+import { userType } from "../helpers/authenticate";
+
+const PrivateRoute = ( { component: Component, ...rest } ) => (
+  <Route {...rest} render={props => (
+    Auth.isUserAuthenticated() && userType() === "admin" ? (
+      <Component {...props} {...rest} />
+    ) : (
+        <Redirect to={{
+          pathname: '/',
+          state: { from: props.location }
+        }} />
+      )
+  )} />
+);
+
+
 
 class App extends Component{
   state = {
@@ -28,6 +43,7 @@ class App extends Component{
       default:
         return this.state.title;
     }
+    
   }
   
   render() {
@@ -39,9 +55,8 @@ class App extends Component{
           <Route exact path="/" component={(props) => <Home {...props}/>} />
           <Route path="/user-signup" component={() => <SignupForm title={title} />} />
           <Route path="/user-login" component={() => <SigninForm title={title} />} />
-          <Route exact path="/polls" component={( props ) => <Polls {...props} />} />
-          <Route path="/polls/:pollId" component={PollDetails} />
-          <Route path="/dashboard" component={Admin} />
+          <Route path="/polls" component={( props ) => <Polls {...props} />} />
+          <PrivateRoute path="/dashboard" component={Admin} />
           <Route path="/*" component={ErrorPage} />
         </Switch>
       </BrowserRouter>

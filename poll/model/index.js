@@ -15,13 +15,17 @@ const pollSchema = new Schema({
   } ],
   photo: { data: Buffer, ContentType: String },
   disabled: { type: Boolean, default: false },
+  comment: [ {
+    comment: String,
+    firstName: String,
+    lastName: String,
+    createdBy: String
+  }],
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
-
-// pollSchema.index( { name: 1 }, { unique: true } );
 
 const Poll = mongoose.model("Poll", pollSchema);
 

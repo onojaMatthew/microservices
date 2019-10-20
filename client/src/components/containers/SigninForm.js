@@ -9,6 +9,8 @@ class SigninForm extends Component {
   state = {
     email: "",
     password: "",
+    firstName: "",
+    lastName: "",
     success: false,
     usertype: "",
   }
@@ -21,7 +23,7 @@ class SigninForm extends Component {
 
   onSubmit = async ( e ) => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const { email, password, firstName, lastName } = this.state;
     const { title, signin } = this.props;
     let userType;
 
@@ -35,7 +37,9 @@ class SigninForm extends Component {
 
     const data = {
       email,
-      password
+      password,
+      firstName,
+      lastName
     }
     console.log( userType, " de user pe" )
     try {
@@ -48,7 +52,7 @@ class SigninForm extends Component {
   }
   render() {
     const { signin, title, } = this.props;
-    const { email, password, success, usertype } = this.state;
+    const { email, password, firstName, lastName, usertype } = this.state;
 
     if (usertype === "user") {
       return <Redirect to="/" />;
@@ -66,6 +70,8 @@ class SigninForm extends Component {
               signin={signin}
               title={title}
               email={email}
+              firstName={firstName}
+              lastName={lastName}
               password={password}
               onSubmit={this.onSubmit}
               handleChange={this.handleChange}
