@@ -8,6 +8,7 @@ import SigninForm from './containers/SigninForm';
 import Admin from './containers/admin/Admin';
 import Polls from './containers/user/Polls';
 import Users from "./containers/user/Users";
+import User from './containers/user/User';
 
 
 class App extends Component{
@@ -39,8 +40,8 @@ class App extends Component{
           <Route path="/user-signup" component={() => <SignupForm title={title} />} />
           <Route path="/user-login" component={() => <SigninForm title={title} />} />
           <Route path="/polls" component={( props ) => <Polls {...props} />} />
-          <Route path="/users" component={( props ) => <Users {...props} />} />
-          
+          <Route exact path="/users" component={( props ) => <Users {...props} />} />
+          <Route path="/users/:userId" component={(props) => <User {...props} />} />
           <Route path="/dashboard" component={Admin} />
           <Route path="/*" component={ErrorPage} />
         </Switch>

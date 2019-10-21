@@ -1,5 +1,5 @@
 import axios from "axios";
-import { userType } from "../../helpers/authenticate";
+import { userType, isAuthenticated } from "../../helpers/authenticate";
 import Auth from "../../helpers/Auth";
 export const SIGNUP_START = "SIGNUP_START";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
@@ -170,12 +170,20 @@ export const getUserFailed = ( error ) => {
   }
 }
 
-export const getUser = ( data, userType ) => {
+export const getUser = ( userId ) => {
   return dispatch => {
     dispatch( getUsersStart() );
-    axios.get( `http://localhost:3020/api/v1/user/all`, { data } )
+    fetch( `http://localhost:3020/api/v1/user/user/${ userId }`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "ACCEPT": "application/json",
+        "x-auth-token": isAuthenticated().token
+      }
+    } )
+      .then(response => response.json())
       .then( resp => {
-        dispatch( getUsersSuccess( resp.data ) );
+        dispatch( getUsersSuccess( resp ) );
       } )
       .catch( err => {
         dispatch( getUsersFailed( err.message ) );

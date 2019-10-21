@@ -1046,3 +1046,5 @@
 {"level":"info","message":"Connection to database established","timestamp":"2019-10-21T10:53:46.331Z"}
 {"level":"error","message":"Failed to connect to db. connect ECONNREFUSED 127.0.0.1:27017","timestamp":"2019-10-21T11:31:28.773Z"}
 {"level":"info","message":"Connection to database established","timestamp":"2019-10-21T11:32:39.599Z"}
+{"level":"info","message":"Connection to database established","timestamp":"2019-10-21T18:20:32.559Z"}
+{"level":"info","message":"Connection to database established","timestamp":"2019-10-21T18:48:33.952Z"}

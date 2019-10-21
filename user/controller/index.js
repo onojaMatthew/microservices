@@ -100,6 +100,22 @@ exports.fetchAllUsers = ( req, res ) => {
 }
 
 /**
+ * Gets a user with the userId params
+ */
+exports.getUser = ( req, res ) => {
+  const { userId } = req.params;
+  if ( !userId ) return res.status( 400 ).json( { error: "Request failed. No user ID provided" } );
+  User.findById( { _id: userId } )
+    .then( user => {
+      if ( !user ) return res.status( 400 ).json( { error: `No user found with the ID ${ userId }` } );
+      res.json( user );
+    } )
+    .catch( err => {
+      res.json( { error: err.message } );
+    } );
+}
+
+/**
  * Deletes user with the ID @param userId
  */
 exports.userDelete = ( req, res ) => {

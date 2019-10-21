@@ -13,6 +13,7 @@ const {
   fetchAllUsers,
   userDelete,
   enablePoll,
+  getUser,
 } = require( "../controller" );
 const router = express.Router();
 const requireLogin = require( "../config/auth" );
@@ -22,6 +23,7 @@ router.post('/signup/:userType', userSignupValidator, signup);
 router.post("/signin", signin);
 router.get( '/signout', signout );
 router.get( "/all", fetchAllUsers );
+router.get( "/user/:userId", requireLogin, getUser );
 router.put( "/create/:userType/:pollId/:userId", requireLogin, createPoll );
 router.put( "/disable/:userType/:pollId/:userId", requireLogin, disablePoll );
 router.put( "/enable/:userType/:pollId/:userId", requireLogin, enablePoll );

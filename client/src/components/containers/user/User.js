@@ -1,9 +1,21 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Row, Col, Button } from "react-bootstrap";
-import avatar from "../../../../assets/images/banner1.jpeg";
+import avatar from "../../../assets/images/banner1.jpeg";
+import { getUser } from "../../../store/actions/actions_signup";
+import { getPoll } from "../../../store/actions/actions_polls";
 
 class User extends Component {
 
+  async componentDidMount() {
+    const { getUser, match, getPoll } = this.props;
+    const userId = match.params.userId;
+    try {
+      await getUser( userId );
+      await getPoll();
+    } catch(err) {}
+
+  }
   /**
  * Deletes poll from the poll database
  */
@@ -15,14 +27,16 @@ class User extends Component {
     } catch ( err ) { }
   }
   render() {
-    const { users: { users }, match } = this.props;
-    const currentUser = users && users.find( user => user._id === match.params.userId );
-
-
+    const { users, polls, match } = this.props;
+    
+    const currentUser = users && users.users ? users.users : null;
+    const comment = polls.polls && polls.polls.comment ? polls.polls.comment : null;
+    console.log( comment, "comment" );
+    console.log( polls, "current user")
     return (
       <div>
         <div className="detail">
-
+          
           <Row className="justify-content-md-center">
             <Col md={10}>
               <img src={avatar} alt="poll" />
@@ -41,7 +55,7 @@ class User extends Component {
                 >Delete user</Button>
               </Row>
             </Col>
-          </Row>
+          </Row> 
         </div>
       </div>
     );
@@ -50,17 +64,19 @@ class User extends Component {
 
 const mapStateToProps = ( state ) => {
   return {
-    users: state.account
+    users: state.account,
+    polls: state.polls
   }
 }
 
 const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
-    getUsers: () => dispatch( getUser ),
-    deleteUser: ( userId ) => dispatch( deleteUser( userId ) )
+    getUser: ( userId ) => dispatch( getUser( userId ) ),
+    getPoll: () => dispatch( getPoll()),
+    // deleteUser: ( userId ) => dispatch( deleteUser( userId ) )
   }
 
   return dispatchToProps;
 }
 
-export default User;
+export default connect(mapStateToProps, mapDispatchToProps)(User);

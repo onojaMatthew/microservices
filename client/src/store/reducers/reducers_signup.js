@@ -90,9 +90,23 @@ const signupReducers = ( state = initialState, action ) => {
         getUserLoading: false,
         error: action.error
       }
-      GET_USER_START
-      GET_USER_SUCCESS
-      GET_USER_FAILED
+    case GET_USER_START:
+      return {
+        ...state,
+        userLoading: true,
+      }
+    case GET_USER_SUCCESS:
+      return {
+        ...state,
+        userSuccess: true,
+        user: action.data
+      }
+    case GET_USER_FAILED:
+      return {
+        ...state,
+        userLoading: false,
+        error: action.error
+      }
     case DELETE_USER_START:
       return {
         ...state,
