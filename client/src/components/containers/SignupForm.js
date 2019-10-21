@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import Signup from "../contents/Signup";
 import { Row, Col } from "react-bootstrap";
 import { signup } from "../../store/actions/actions_signup";
@@ -51,11 +52,12 @@ class SignupForm extends Component{
     const { signup, title, account } = this.props;
     const { email, password, firstName, lastName, usertype } = this.state;
     
-    if ( account.isSignupSuccess=== true && usertype === "user" ) {
+    if ( account.account && account.account.error.length < 1 && usertype === "user" ) {
       window.location.href = "/user-login";
-    }
+    } 
+    
 
-    if ( account.isSignupSuccess === true && usertype === "admin" ) {
+    if (account.account && account.account.error.length < 1 && usertype === "admin" ) {
       window.location.href = "/dashboard/login";
     }
     

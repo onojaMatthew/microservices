@@ -11,6 +11,11 @@ export const SIGNIN_FAILED = "SIGNIN_FAILED";
 export const GET_USERS_START = "GET_USERS_START";
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const GET_USERS_FAILED = "GET_USERS_FAILED";
+
+export const GET_USER_START = "GET_USER_START";
+export const GET_USER_SUCCESS = "GET_USER_SUCCESS";
+export const GET_USER_FAILED = "GET_USER_FAILED";
+
 export const DELETE_USER_START = "DELETE_USERS_START";
 export const DELETE_USER_SUCCESS = "DELETE_USERS_SUCCESS";
 export const DELETE_USER_FAILED = "DELETE_USERS_FAILED";
@@ -90,16 +95,18 @@ export const signin = ( data, userType ) => {
   return dispatch => {
     dispatch( signinStart() );
     fetch( `http://localhost:3020/api/v1/user/signin`, { 
-      method: "POS",
+      method: "POST",
       headers: {
-        "Content- ": "application/json",
-        ACCEP: "application/json"
+        "Content-Ty": "application/json",
+        ACCEPT: "application/json"
       },
       body: JSON.stringify(data)
     } )
       .then(response => response.json())
       .then( resp => {
-        if (resp.error) 
+        if ( resp.error ) {
+          dispatch( signinFailed( resp.error ) );
+        }
         Auth.authenticateUser( JSON.stringify(resp ));
         dispatch( signinSuccess( resp ) );
       } )
@@ -143,6 +150,38 @@ export const getUsers = ( data, userType ) => {
   }
 }
 
+export const getUserStart = () => {
+  return {
+    type: GET_USER_START
+  }
+}
+
+export const getUserSuccess = ( data ) => {
+  return {
+    type: GET_USER_SUCCESS,
+    data
+  }
+}
+
+export const getUserFailed = ( error ) => {
+  return {
+    type: GET_USER_FAILED,
+    error
+  }
+}
+
+export const getUser = ( data, userType ) => {
+  return dispatch => {
+    dispatch( getUsersStart() );
+    axios.get( `http://localhost:3020/api/v1/user/all`, { data } )
+      .then( resp => {
+        dispatch( getUsersSuccess( resp.data ) );
+      } )
+      .catch( err => {
+        dispatch( getUsersFailed( err.message ) );
+      } );
+  }
+}
 
 export const deleteUserStart = () => {
   return {

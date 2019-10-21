@@ -1,72 +1,41 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { Link } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
-import { upload } from "../../../store/actions/uploads";
-// import CustomerForm from "../../contents/CustomerForm";
-import FormData from "form-data";
+import avater from "../../../assets/images/banner1.jpeg";
 
 class UserList extends Component {
-  state = {
-    caption: "",
-    image: "",
-    success: false,
-    usertype: "",
-  }
 
-  handleChange = ( ev ) => {
-    let fields = this.state;
-
-    // console.log(ev.target.files[0])
-    const value = ev.target.name === "image" ? ev.target.files[0] : ev.target.value;
-    fields[ ev.target.name ] = value;
-    this.setState( { fields } );
-    console.log(this.state, " this is the state")
-  }
-
-  onSubmit = async ( e ) => {
-    e.preventDefault();
-    const { image } = this.state;
-    const { upload } = this.props;
-    let formData = new FormData();
-    formData.append( "image", image );
-    // const data = {  }
-    try {
-      await upload( formData );
-
-    } catch ( err ) {
-      return;
-    }
-
-  }
   render() {
-    const { title, } = this.props;
-    const { caption, image } = this.state;
+    const { match, users: { users } } = this.props;
+    console.log( users )
+    const userData = users && users.map( user => (
+      <Col md={4} key={user._id}>
+        <div className="poll-card">
+          <div className="poll-image">
+            <img src={avater} alt="poll" />
+          </div>
+          <hr />
+          <p className="lead"><strong>Name</strong>{user.firstName} {user.lastName}</p>
+          <p><strong>Email </strong>: {user.email}</p>
+          <p className="view">
+            <Link to={`${ match.url }/${ user._id }`} style={{ textDecoration: "none" }}>
+              View details
+            </Link>
+          </p>
+        </div>
 
+      </Col>
+    ) )
     return (
-      <div className="signupform">
-        <Row className="justify-content-md-center">
-          <Col md={4}>
-            <p>Home for all</p>
-          </Col>
+      <div>
+        <h3>Hello from users</h3>
+        <Row>
+          {userData}
         </Row>
+
       </div>
-    );
+    )
   }
 }
 
-const mapStateToProps = ( state ) => {
-  return {
-    upload: state.upload
-  }
-}
-
-const mapDispatchToProps = ( dispatch ) => {
-  const dispatchProps = {
-    upload: ( data ) => dispatch( upload( data ) ),
-  };
-
-  return dispatchProps;
-}
-
-export default connect( mapStateToProps, mapDispatchToProps )( UserList );
+export default UserList;

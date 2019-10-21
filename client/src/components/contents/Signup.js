@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Alert, Form, Button } from "react-bootstrap";
 import avatar from "../../assets/images/signup.jpeg";
 
-function Signup({usertype, firstName, lastName, email, password, title, onSubmit, handleChange }) {
+function Signup( { account, usertype, firstName, lastName, email, password, title, onSubmit, handleChange }) {
   return (
     <div className="signup mb-5">
       <Form>
@@ -18,7 +18,7 @@ function Signup({usertype, firstName, lastName, email, password, title, onSubmit
           marginTop: 10,
           marginBottom: 10
         }}>{title}</h4>
-
+        {account.error.length > 0 ? <Alert variant="danger">{account.error}</Alert> : null}
         <Form.Group>
           <Form.Label>First name</Form.Label>
           <Form.Control

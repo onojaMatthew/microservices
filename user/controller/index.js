@@ -4,10 +4,9 @@ const fetch = require( "node-fetch" );
 
 // Handles user acount registration
 exports.signup = (req, res) => {
-  const { email, password, firstName, lastName } = req.body.data;
+  const { email, password, firstName, lastName } = req.body;
   const { userType } = req.params;
 
-  console.log(firstName, lastName)
   if (!email || !password) return res.status(400).json({ error: "Email and password are required for account sign up" });
   if (!userType) return res.status(400).json({ error: "User unknown" });
   let user_type;
@@ -54,7 +53,7 @@ exports.signup = (req, res) => {
 
 // Handles user account login
 exports.signin = (req, res) => {
-  const { email, password } = req.body.data;
+  const { email, password } = req.body;
   // const { userType } = req.params;
 
   // check for email and password in the req.body

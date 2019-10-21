@@ -18,7 +18,7 @@ function Signin( { account, firstName, lastName, email, password, handleChange, 
             marginTop: 10,
             marginBottom: 10
           }}>{title}</h4>
-        {account.error.length > 0 ? <Alert>{account.error}</Alert> : null}
+        {account.error.length > 0 ? <Alert variant="danger">{account.error}</Alert> : null}
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control

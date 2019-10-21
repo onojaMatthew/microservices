@@ -118,7 +118,6 @@ class PollDetails extends Component {
     } else {
       return (
         <div className="detail">
-          
           <Row className="justify-content-md-center">
             <Col md={10}>
               <h5>{selectedPoll && selectedPoll.name}</h5>
@@ -126,7 +125,7 @@ class PollDetails extends Component {
                 src={`http://localhost:3040/api/v1/poll/photo/${ pId }`}
                 alt="poll"
                 onError={i => i.target.src = `${ avatar }`}
-                style={{ width: "100%", height: 350}}
+                style={{ width: "100%", height: "400px" }}
               />
               <Row>
 

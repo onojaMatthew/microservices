@@ -10,7 +10,8 @@ const PollList = ( { polls: { polls }, match, } ) => {
     <Col md={4} key={poll._id}>
       <div className="poll-card">
         <div className="poll-image">
-          <img src={avatar} alt="poll" />
+          <img src={`http://localhost:3040/api/v1/poll/photo/${ poll._id }`}
+            onError={( i ) => i.target.src = `${ avatar }`} alt="poll" />
         </div>
         <hr />
         <p className="lead">{poll.name}</p>
