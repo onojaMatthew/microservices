@@ -24,10 +24,6 @@ html, body {
   box-shadow: 6px 6px 3px #333, -6px -6px 3px #333;
 }
 
-.hcontainer h3 {
-  /* margin */
-}
-
 @media only screen and (max-width: 490px) {
   .hcontainer {
     padding-top: 100px;
@@ -112,7 +108,7 @@ html, body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  height: 250px;
+  height: 20px;
   width: 103%;
   margin-left: -27px;
 }

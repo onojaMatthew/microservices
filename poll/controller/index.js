@@ -58,9 +58,10 @@ exports.tags = ( req, res ) => {
 exports.postComment = ( req, res ) => {
   const { comment, firstName, lastName } = req.body;
   const { pollId, userType, userId } = req.params;
-  // if ( !comment || !firstName || !lastName ) return res.status( 400 ).json( { error: "Incomplete data" } );
+  if ( !firstName || !lastName ) return res.status( 400 ).json( { error: "Please log in correctly" } );
+  if ( !comment ) return res.status( 400 ).json( { error: "Comment is required"})
   if ( !pollId ) return res.status( 400 ).json( { error: "Poll ID is not provided" } );
-  if ( userType !== "user" ) return res.status( 400 ).json( { error: "Only users are allowed to post commente" } );
+  if ( userType !== "user" ) return res.status( 400 ).json( { error: "Only users are allowed to post comments" } );
   const newData = {
     comment,
     firstName,
@@ -197,7 +198,7 @@ exports.likePoll = ( req, res ) => {
        */
       const likes = poll.likes;
       if ( likes.includes( userId ) ) return res.status( 400 ).json( {
-        error: "you have like this poll already"
+        error: "you have liked this poll already"
       } );
 
       // Here we find the poll with the given pollId and update it
@@ -216,11 +217,11 @@ exports.likePoll = ( req, res ) => {
 exports.photo = ( req, res, next ) => {
   const { pollId } = req.params;
   
-  Poll.findById( { pollId } )
+  Poll.findById( { _id: pollId } )
     .then( poll => {
       if ( !poll ) return res.status( 400 ).json( { error: "Poll not found" } );
-      res.set( "Content-Type", poll.photo.contentType );
-      return res.json( poll.photo.data );
+      res.set( "Content-Type", poll.photo.ContentType );
+      return res.send( poll.photo.data );
     } )
     .catch( err => {
       res.json( { error: err.message } );
@@ -277,7 +278,7 @@ exports.uploadUpdate = ( req, res ) => {
 exports.fetchAllPoll = (req, res) => {
   Poll.find( {} )
     .sort( {createdAt: -1 } )
-    .then(poll => {
+    .then( poll => {
       if ( !poll ) return res.status( 400 ).json( { error: "No records found" } );
       res.json(poll);
     })

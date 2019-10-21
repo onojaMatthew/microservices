@@ -15,9 +15,10 @@ const {
   enablePoll,
 } = require( "../controller" );
 const router = express.Router();
-const requireLogin = require("../config/auth")
+const requireLogin = require( "../config/auth" );
+const {userSignupValidator} = require("../validatator")
 
-router.post('/signup/:userType', signup);
+router.post('/signup/:userType', userSignupValidator, signup);
 router.post("/signin", signin);
 router.get( '/signout', signout );
 router.get( "/all", fetchAllUsers );

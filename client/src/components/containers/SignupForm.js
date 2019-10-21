@@ -22,7 +22,7 @@ class SignupForm extends Component{
 
   onSubmit = async ( e ) => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const { email, password, firstName, lastName } = this.state;
     const { title, signup } = this.props;
     let userType;
 
@@ -36,7 +36,9 @@ class SignupForm extends Component{
 
     const data = {
       email,
-      password
+      password,
+      firstName,
+      lastName
     }
     try {
       await signup( data, userType );
@@ -46,14 +48,14 @@ class SignupForm extends Component{
   }
   
   render() {
-    const { signup, title } = this.props;
+    const { signup, title, account } = this.props;
     const { email, password, firstName, lastName, usertype } = this.state;
     
-    if (usertype === "user" ) {
+    if ( account.isSignupSuccess=== true && usertype === "user" ) {
       window.location.href = "/user-login";
     }
 
-    if (usertype === "admin" ) {
+    if ( account.isSignupSuccess === true && usertype === "admin" ) {
       window.location.href = "/dashboard/login";
     }
     
@@ -71,6 +73,8 @@ class SignupForm extends Component{
               password={password}
               onSubmit={this.onSubmit}
               handleChange={this.handleChange}
+              account={account}
+              usertype={usertype}
             />
           </Col>
           <Col md={4}></Col>

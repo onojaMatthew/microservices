@@ -1,13 +1,11 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
-import { Form, Button, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import avatar from "../../../assets/images/banner1.jpeg";
 import Auth from "../../../helpers/Auth";
-import { isAuthenticated } from "../../../helpers/authenticate";
 
-const token = isAuthenticated().token;
 const PollList = ( { polls: { polls }, match, } ) => {
-  console.log(polls, " from poll lis")
+  
   const pollData = polls && polls.map( poll => (
     <Col md={4} key={poll._id}>
       <div className="poll-card">

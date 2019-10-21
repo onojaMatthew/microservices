@@ -1,34 +1,35 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { isAuthenticated, userType } from "../helpers/authenticate";
-import history from "../helpers/history";
+import { isAuthenticated } from "../helpers/authenticate";
 import Auth from "../helpers/Auth";
 import { logout } from "../store/actions/actions_signup";
   
 
 class Header extends Component{
   state = {
-    isUserAuthenticated: false
+    isLoggedIn: false
   }
 
   componentDidMount() {
     if ( isAuthenticated().token ) {
       this.setState( {
-        isUserAuthenticated: true
+        isUserAuthenticated: true,
+        isLoggedIn: false,
       } )
     }
   }
+  
 
   handleLogout = async () => {
     const { logout } = this.props;
     Auth.deauthenticateUser();
     await logout();
-    window.location.href = "/user-login";
+    window.location.href = "/";
   }
 
   render() {
-    
+    const url = window.location.pathname;
     return (
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Brand href="/">Poll App</Navbar.Brand>
@@ -36,7 +37,7 @@ class Header extends Component{
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="/polls">Polls</Nav.Link>
-            {userType() === "admin" ? (
+            {url === "/dashboard" ? (
               <NavDropdown title="Account" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/dashboard">Sign up as admin</NavDropdown.Item>
                 <NavDropdown.Item href="/dashboard/login">Login as admin</NavDropdown.Item>
@@ -51,9 +52,10 @@ class Header extends Component{
               )}
           </Nav>
           <>
+            <span style={{ color: "#fff"}}>{isAuthenticated().user ? isAuthenticated().user.firstName : null}</span>
             {this.state.isUserAuthenticated === true ? (
               <div
-                className="btn btn-info"
+                className="btn btn-info ml-4"
                 onClick={this.handleLogout}
               >
                 Log out

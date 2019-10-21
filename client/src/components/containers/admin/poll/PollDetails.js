@@ -18,12 +18,12 @@ class PollDetails extends Component {
     })
   }
 
-  async componentDidMount() {
-    // const { fetchPoll, match } = this.props; 
+  componentDidMount() {
+    // const { getPollPhoto, match } = this.props;
     // const pollId = match.params.pollId;
-    try {
-      // await fetchPoll( pollId );
-    } catch(err) {}
+    // try {
+    //   getPollPhoto(pollId);
+    // } catch(err) {}
     
   }
 
@@ -34,7 +34,7 @@ class PollDetails extends Component {
       }
     })
   }
-
+  
 
   toggleButton = () => {
     const { polls, match } = this.props;
@@ -96,7 +96,7 @@ class PollDetails extends Component {
     const { isShow } = this.state;
     const { polls, match, tagPoll, createPoll, getPoll } = this.props;
     let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
-
+    const pId = selectedPoll ? selectedPoll._id : null;
     const comments = selectedPoll && selectedPoll.comment && selectedPoll.comment.map( comment => (
       <div key={comment._id}>
         <hr />
@@ -122,7 +122,12 @@ class PollDetails extends Component {
           <Row className="justify-content-md-center">
             <Col md={10}>
               <h5>{selectedPoll && selectedPoll.name}</h5>
-              <img src={avatar} alt="poll" />
+              <img
+                src={`http://localhost:3040/api/v1/poll/photo/${ pId }`}
+                alt="poll"
+                onError={i => i.target.src = `${ avatar }`}
+                style={{ width: "100%", height: 350}}
+              />
               <Row>
 
               </Row>
@@ -183,17 +188,6 @@ class PollDetails extends Component {
                   </Row>
                 )}
               <hr />
-
-              <Row className="mb-5 mt-5">
-                <Col md={12}>
-                  <form className="form-inline">
-                    <div className="form-group mx-sm-3 mb-2">
-                      <input type="text" className="form-control" placeholder="Comment" />
-                    </div>
-                    <button className="btn btn-info mb-2">Post Comment</button>
-                  </form>
-                </Col>
-              </Row>
 
               <Row className="mb-5">
 

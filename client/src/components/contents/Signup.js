@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import avatar from "../../assets/images/signup.jpeg";
 
-function Signup({ firstName, lastName, email, password, title, onSubmit, handleChange }) {
+function Signup({usertype, firstName, lastName, email, password, title, onSubmit, handleChange }) {
   return (
     <div className="signup mb-5">
       <Form>
@@ -73,6 +74,7 @@ function Signup({ firstName, lastName, email, password, title, onSubmit, handleC
           Submit
         </Button>
       </Form>
+      <p>Don't have an account ? {usertype === "user" ? <Link to="/user-login">Login</Link>: <Link to="/dashboard/login">Login</Link>}</p>
     </div>
   );
 }

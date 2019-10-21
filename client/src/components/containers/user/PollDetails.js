@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row, Alert } from "react-bootstrap";
 import avatar from "../../../assets/images/banner1.jpeg";
 import { userType, isAuthenticated } from "../../../helpers/authenticate";
 
@@ -56,6 +56,7 @@ class PollDetails extends Component {
   render() {
     const { polls, match } = this.props;
     let selectedPoll = polls && polls.polls && polls.polls.length > 0 ? polls.polls.find( poll => poll._id === match.params.pollId ) : null;
+    const pId = selectedPoll ? selectedPoll._id : null;
     const comments = selectedPoll && selectedPoll.comment && selectedPoll.comment.map( comment => (
       <div key={comment._id}>
         <hr />
@@ -63,7 +64,6 @@ class PollDetails extends Component {
         <p>{comment.comment}</p>
       </div>
     ) );
-    console.log( comments, " all comment")
     const tag = selectedPoll && selectedPoll.tags.map( tag => tag );
     return (
       <div className="detail">
@@ -71,7 +71,15 @@ class PollDetails extends Component {
         <Row className="justify-content-md-center">
           <Col md={10}>
             <h5>{selectedPoll && selectedPoll.name}</h5>
-            <img src={avatar} alt="poll" />
+            <img
+              src={`http:localhost:3040/api/v1/poll/${ pId }`}
+              alt="poll"
+              onError={( i ) => i.target.src = `${ avatar }`}
+              style={{
+                height: "100px",
+                width: "100%"
+              }}
+            />
             <Row>
 
             </Row>
@@ -86,7 +94,8 @@ class PollDetails extends Component {
                 <h6><strong>Likes</strong>: {selectedPoll && selectedPoll.likes.length}</h6>
               </Col>
             </Row>
-
+            {polls.error.length > 0 && polls.error.includes( "voted" ) ? <Alert variant="danger">{polls.error}</Alert> : null}
+            {polls.error.length > 0 && polls.error.includes( "liked" ) ? <Alert variant="danger">{polls.error}</Alert> : null}
             {userType() === "user" ? (
                 <Row>
                   <Col md={4}>
@@ -111,7 +120,7 @@ class PollDetails extends Component {
               ) : null
             }
             <hr />
-
+            {polls.error.length > 0 && !polls.error.includes( "liked" ) && !polls.error.includes( "voted" )? <Alert variant="danger">{polls.error}</Alert> : null}
             <Row className="mb-5 mt-5">
               <Col md={12}>
                 <form className="form-inline">

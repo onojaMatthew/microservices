@@ -1,13 +1,25 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom"
+import { Route, Switch, Redirect } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
-import Sidebar from "./Sidebar";
-import Poll from "./poll/Poll";
-import Users from "./users/Users";
-import AdminIndex from "./AdminIndex";
 import SigninForm from "../SigninForm";
 import SignupForm from "../SignupForm";
 import AdminHome from "./AdminHome";
+import Auth from "../../../helpers/Auth";
+import { userType } from "../../../helpers/authenticate";
+
+
+const PrivateRoute = ( { component: Component, ...rest } ) => (
+  <Route {...rest} render={props => (
+    Auth.isUserAuthenticated() && userType() === "admin" ? (
+      <Component {...props} {...rest} />
+    ) : (
+        <Redirect to={{
+          pathname: '/',
+          state: { from: props.location }
+        }} />
+      )
+  )} />
+);
 
 class Admin extends Component {
   state = {
@@ -36,7 +48,7 @@ class Admin extends Component {
             <Switch>
               <Route exact path={`${ match.url }`} component={() => <SignupForm title={title} />} />
               <Route path={`${ match.url }/login`} component={() => <SigninForm title={title} />} />
-              <Route path={`${match.url}/index`} component={AdminHome}/>
+              <PrivateRoute path={`${match.url}/index`} component={AdminHome}/>
             </Switch>
           </Col>
         </Row>

@@ -9,8 +9,6 @@ class SigninForm extends Component {
   state = {
     email: "",
     password: "",
-    firstName: "",
-    lastName: "",
     success: false,
     usertype: "",
   }
@@ -23,7 +21,7 @@ class SigninForm extends Component {
 
   onSubmit = async ( e ) => {
     e.preventDefault();
-    const { email, password, firstName, lastName } = this.state;
+    const { email, password } = this.state;
     const { title, signin } = this.props;
     let userType;
 
@@ -37,9 +35,7 @@ class SigninForm extends Component {
 
     const data = {
       email,
-      password,
-      firstName,
-      lastName
+      password
     }
     console.log( userType, " de user pe" )
     try {
@@ -51,14 +47,14 @@ class SigninForm extends Component {
     this.setState( { success: this.props.account.isSigninSuccess } );
   }
   render() {
-    const { signin, title, } = this.props;
-    const { email, password, firstName, lastName, usertype } = this.state;
-
-    if (usertype === "user") {
-      return <Redirect to="/" />;
+    const { signin, title, account } = this.props;
+    const { email, password, usertype } = this.state;
+    
+    if ( account.isSigninSuccess === true && usertype === "user") {
+      return <Redirect to="/polls" />;
     }
     
-    if (usertype === "admin") {
+    if ( account.isSigninSuccess === true && usertype === "admin") {
       return <Redirect to="/dashboard/index" />;
     }
 
@@ -70,11 +66,11 @@ class SigninForm extends Component {
               signin={signin}
               title={title}
               email={email}
-              firstName={firstName}
-              lastName={lastName}
               password={password}
+              account={account}
               onSubmit={this.onSubmit}
               handleChange={this.handleChange}
+              usertype={usertype}
             />
           </Col>
         </Row>

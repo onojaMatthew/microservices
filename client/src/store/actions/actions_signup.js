@@ -42,9 +42,20 @@ export const signupFailed = ( error ) => {
 export const signup = ( data, userType ) => {
   return dispatch => {
     dispatch( signupStart() );
-    axios.post( `http://localhost:3020/api/v1/user/signup/${ userType }`, { data } )
+    fetch( `http://localhost:3020/api/v1/user/signup/${ userType }`, { 
+      method: "POST",
+      headers: {
+        ACCEPT: "application/json",
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify( data)
+    } )
+      .then(response => response.json())
       .then( resp => {
-        dispatch( signupSuccess( resp.data ) );
+        if ( resp.error ) {
+          dispatch(signinFailed(resp.error))
+        }
+        dispatch( signupSuccess( resp ) );
       } )
       .catch( err => {
         dispatch( signupFailed( err.message ) );
@@ -78,10 +89,19 @@ export const signinFailed = ( error ) => {
 export const signin = ( data, userType ) => {
   return dispatch => {
     dispatch( signinStart() );
-    axios.post( `http://localhost:3020/api/v1/user/signin`, { data } )
+    fetch( `http://localhost:3020/api/v1/user/signin`, { 
+      method: "POS",
+      headers: {
+        "Content- ": "application/json",
+        ACCEP: "application/json"
+      },
+      body: JSON.stringify(data)
+    } )
+      .then(response => response.json())
       .then( resp => {
-        Auth.authenticateUser( JSON.stringify(resp.data ));
-        dispatch( signinSuccess( resp.data ) );
+        if (resp.error) 
+        Auth.authenticateUser( JSON.stringify(resp ));
+        dispatch( signinSuccess( resp ) );
       } )
       .catch( err => {
         dispatch( signinFailed( err.message ) );
@@ -179,7 +199,6 @@ export const logoutFailed = ( error ) => {
 }
 
 export const logout = () => {
-  console.log("inside logou")
   return dispatch => {
     dispatch( logoutStart() );
     fetch( `http://localhost:3020/api/v1/user/signout`, {

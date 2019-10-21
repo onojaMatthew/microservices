@@ -2,8 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const db = require("./config/db");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-
+const cookieParser = require( "cookie-parser" );
+const validator = require( "express-validator" );
 const app = express();
 
 // creating the server port
@@ -19,7 +19,8 @@ db()
 app.use(morgan("dev"));
 app.use( bodyParser.json( { limit: '50mb' } ) );
 app.use( bodyParser.urlencoded( { limit: '50mb', extended: true } ) );
-app.use(cookieParser());
+app.use( cookieParser() );
+app.use( validator() );
 
 //==================================================
 // Setting up Cross Origin Resource Sharing

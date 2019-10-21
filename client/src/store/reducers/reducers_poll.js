@@ -2,36 +2,43 @@ import {
   CREATE_POLL_START,
   CREATE_POLL_SUCCESS,
   CREATE_POLL_FAILED,
+
   GET_POLL_START,
   GET_POLL_SUCCESS,
   GET_POLL_FAILED,
+
   TAG_POLL_START,
   TAG_POLL_SUCCESS,
   TAG_POLL_FAILED,
+
   LIKE_POLL_START,
   LIKE_POLL_SUCCESS,
   LIKE_POLL_FAILED,
+
   VOTE_POLL_START,
   VOTE_POLL_SUCCESS,
   VOTE_POLL_FAILED,
+
   DISABLE_POLL_START,
   DISABLE_POLL_SUCCESS,
   DISABLE_POLL_FAILED,
+
   UPLOAD_POLL_PHOTO_START,
   UPLOAD_POLL_PHOTO_SUCCESS,
   UPLOAD_POLL_PHOTO_FAILED,
+
   DELETE_POLL_START,
   DELETE_POLL_SUCCESS,
   DELETE_POLL_FAILED,
+
   ENABLE_POLL_START,
   ENABLE_POLL_SUCCESS,
   ENABLE_POLL_FAILED,
+
   UPDATE_UPLOAD_POLL_PHOTO_START,
   UPDATE_UPLOAD_POLL_PHOTO_SUCCESS,
   UPDATE_UPLOAD_POLL_PHOTO_FAILED,
-  FETCH_POLL_START,
-  FETCH_POLL_SUCCESS,
-  FETCH_POLL_FAILED,
+
   POST_COMMENT_START,
   POST_COMMENT_SUCCESS,
   POST_COMMENT_FAILED,
@@ -40,28 +47,40 @@ import {
 const initialState = {
   polls: [],
   photo: {},
+
   createPollSuccess: false,
   createPollLoading: false,
+
   getPollSuccess: false,
   getPollLoading: false,
+
   tagLoading: false,
   tagSuccess: false,
+
   likeLoading: false,
   likeSuccess: false,
+
   voteLoading: false,
   voteSuccess: false,
+
   disableLoading: false,
   disableSuccess: false,
+
   uploadLoading: false,
   uploadSuccess: false,
+
   deleteLoading: false,
   deleteSuccess: false,
+
   enableLoading: false,
   enableSuccess: false,
+
   photoLoading: false,
   photoSuccess: false,
+
   uploadUpdateLoading: false,
   uploadUpdateSuccess: false,
+
   commentLoading: false,
   commentSuccess: false,
   error: {},
@@ -75,6 +94,7 @@ const pollReducers = ( state = initialState, action ) => {
         ...state,
         createPollLoading: true
       }
+
     case CREATE_POLL_SUCCESS:
       return {
         ...state,
@@ -125,23 +145,6 @@ const pollReducers = ( state = initialState, action ) => {
       return {
         ...state,
         likeLoading: true
-      }
-    case FETCH_POLL_START:
-      return {
-        ...state,
-        photoLoading: true
-      }
-    case FETCH_POLL_SUCCESS:
-      return {
-        ...state,
-        photoSuccess: true,
-        photo: action.data
-      }
-    case FETCH_POLL_FAILED:
-      return {
-        ...state,
-        photoLoading: false,
-        error: action.error
       }
     case LIKE_POLL_SUCCESS:
       return {

@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import { Col, Row, Container } from "react-bootstrap";
-import { getPoll, fetchPoll, votePoll, likePoll, postComment } from "../../../store/actions/actions_polls";
+import { getPoll, votePoll, likePoll, postComment } from "../../../store/actions/actions_polls";
 import PollList from "./PollList";
 import PollDetails from "./PollDetails";
 
 class Polls extends Component {
   async componentDidMount() {
-    const { getPoll, fetchPoll } = this.props;
+    const { getPoll } = this.props;
     try {
       await getPoll();
-      // await fetchPoll()
     } catch ( err ) { }
   }
   render() {
@@ -53,7 +51,6 @@ const mapStateToProps = ( state ) => {
 const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
     getPoll: () => dispatch( getPoll() ),
-    fetchPoll: ( pollId ) => dispatch( fetchPoll( pollId ) ),
     votePoll: ( pollId ) => dispatch( votePoll( pollId ) ),
     likePoll: ( pollId ) => dispatch( likePoll( pollId ) ),
     postComment: ( data, pollId ) => dispatch( postComment( data, pollId))

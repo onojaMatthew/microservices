@@ -36,7 +36,10 @@ const userSchema = new Schema( {
 
 userSchema.methods.generateToken = function () {
   const token = jwt.sign( {
-    _id: this._id, email: this.email, userType: this.userType, role: this.role
+    _id: this._id,
+    email: this.email,
+    userType: this.userType,
+    role: this.role
   }, process.env.JWT_SECRET_DEAL ) 
   return token;
 }

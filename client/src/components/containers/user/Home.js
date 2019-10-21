@@ -1,22 +1,18 @@
 import React, { Component } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import UserLis from "./UserLis";
 import { getUsers } from "../../../store/actions/actions_signup";
 
 class Home extends Component {
   async componentDidMount() {
-    const { getPoll, fetchPoll } = this.props;
+    const { getPoll } = this.props;
     try {
       await getPoll();
     } catch(err) {}
   }
   render() {
-    const {
-      match,
-      users,
-    } = this.props;
+    
     
     return (
       <div>

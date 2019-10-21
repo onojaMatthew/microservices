@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import avatar from "../../../../assets/images/banner1.jpeg";
-import { isAuthenticated } from "../../../../helpers/authenticate";
 
 class UserDetails extends Component {
 

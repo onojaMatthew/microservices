@@ -13,9 +13,6 @@ export const GET_POLL_START = "GET_POLL_START";
 export const GET_POLL_SUCCESS = "GET_POLL_SUCCESS";
 export const GET_POLL_FAILED = "GET_POLL_FAILED";
 
-export const FETCH_POLL_START = "FETCH_POLL_START";
-export const FETCH_POLL_SUCCESS = "FETCH_POLL_SUCCESS";
-export const FETCH_POLL_FAILED = "FETCH_POLL_FAILED";
 /**
  * tag action type
  */
@@ -77,8 +74,9 @@ export const POST_COMMENT_START = "POST_COMMENT_START"
 export const POST_COMMENT_SUCCESS = "POST_COMMENT_SUCCESS"
 export const POST_COMMENT_FAILED = "POST_COMMENT_FAILED"
 
+
 const BASE_URL = "http://localhost:3020/api/v1/user";
-const MAIN_BASE_URL = "http://localhost:3030/api/v1/poll";
+const MAIN_BASE_URL = "http://localhost:3040/api/v1/poll";
 
 export const createPollStart = () => {
   return {
@@ -165,48 +163,6 @@ export const getPoll = () => {
   }
 }
 
-/**
- * Fetching  a single poll photo
- */
-export const fetchPollStart = () => {
-  return {
-    type: FETCH_POLL_START
-  }
-}
-
-export const fetchPollSuccess = () => {
-  return {
-    type: FETCH_POLL_START
-  }
-}
-
-export const fetchPollFailed = () => {
-  return {
-    type: FETCH_POLL_START
-  }
-}
-
-
-export const fetchPoll = (pollId) => {
-  // return dispatch => {
-  //   dispatch( fetchPollStart() )
-  //   fetch( `${ MAIN_BASE_URL }/photo/${pollId}`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       ACCEPT: "application/json"
-  //     }
-  //   } )
-  //     .then( response => response.json() 
-  //     .then( resp => {
-  //       dispatch( fetchPollSuccess( resp ) );
-  //     } )
-  //     .catch( err => {
-  //       dispatch( fetchPollFailed( err.message ) );
-  //     } );
-  // }
-}
-
 
 export const tagPollStart = () => {
   return {
@@ -286,6 +242,9 @@ export const likePoll = ( pollId ) => {
       } )
         .then( response => response.json() )
         .then( resp => {
+          if ( resp.error ) {
+            dispatch( likePollFailed( resp.error ) );
+          }
           dispatch( likePollSuccess( resp ) );
           dispatch( getPoll() );
         } )
@@ -331,6 +290,9 @@ export const postComment = ( data, pollId ) => {
     } )
       .then( response => response.json() )
       .then( resp => {
+        if ( resp.error ) {
+          dispatch( postCommentFailed( resp.error ) );
+        }
         dispatch( postCommentSuccess( resp ) )
         dispatch( getPoll() );
       } )
@@ -375,6 +337,9 @@ export const votePoll = ( pollId ) => {
       } )
         .then( response => response.json() )
         .then( resp => {
+          if ( resp.error ) {
+            dispatch( votePollFailed( resp.error ) );
+          }
           dispatch( votePollSuccess( resp ) );
           dispatch( getPoll() );
         } )
@@ -538,7 +503,6 @@ export const uploadPollFailed = ( error ) => {
 }
 
 export const uploadPoll = ( data ) => {
-  const userId = isAuthenticated().user._id;
   return dispatch => {
     dispatch( uploadPollStart() );
     fetch( `${ MAIN_BASE_URL }/upload/${ userType() }`, {
@@ -576,7 +540,6 @@ export const uploadUpdateFailed = ( error ) => {
 }
 
 export const uploadUpdate = ( data ) => {
-  const userId = isAuthenticated().user._id;
   return dispatch => {
     dispatch( uploadUpdateStart() );
     fetch( `${ MAIN_BASE_URL }/upload/update${ userType() }`, {

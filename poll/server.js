@@ -5,7 +5,7 @@ const morgan = require("morgan");
 
 const app = express();
 
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 3040;
 db();
 
 app.set("port", port);

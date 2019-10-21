@@ -1,8 +1,8 @@
 import React from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import avatar from "../../assets/images/signup.jpeg";
 
-function Signin({ firstName, lastName, email, password, handleChange, onSubmit, title }) {
+function Signin( { account, firstName, lastName, email, password, handleChange, onSubmit, title }) {
   return (
     <div className="signup mb-5">
       <Form>
@@ -18,28 +18,7 @@ function Signin({ firstName, lastName, email, password, handleChange, onSubmit, 
             marginTop: 10,
             marginBottom: 10
           }}>{title}</h4>
-        <Form.Group>
-          <Form.Label>First name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="First name"
-            className="form-control"
-            value={firstName}
-            onChange={( e ) => handleChange( "email", e )}
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Last name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Last name"
-            className="form-control"
-            value={lastName}
-            onChange={( e ) => handleChange( "lastName", e )}
-          />
-        </Form.Group>
-
+        {account.error.length > 0 ? <Alert>{account.error}</Alert> : null}
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control

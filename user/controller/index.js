@@ -7,6 +7,7 @@ exports.signup = (req, res) => {
   const { email, password, firstName, lastName } = req.body.data;
   const { userType } = req.params;
 
+  console.log(firstName, lastName)
   if (!email || !password) return res.status(400).json({ error: "Email and password are required for account sign up" });
   if (!userType) return res.status(400).json({ error: "User unknown" });
   let user_type;
@@ -31,8 +32,8 @@ exports.signup = (req, res) => {
 
           // save the new user to the user model
           let newUser = new User( {
-            firstName,
-            lastName,
+            firstName: firstName,
+            lastName: lastName,
             email,
             password: hashedPassword,
             userType: user_type,
@@ -76,7 +77,7 @@ exports.signin = (req, res) => {
           const { _id, email, firstName, lastName, userType, role } = user;
           res.cookie( "token", token, { expire: new Date() + 9999 } );
           // We respond 
-          res.json({  token, user: { _id, email, userType, role }});
+          res.json( { token, user: { _id, email, userType, role, firstName, lastName }});
         });
     })
     .catch(err => {
@@ -89,6 +90,7 @@ exports.signin = (req, res) => {
  */
 exports.fetchAllUsers = ( req, res ) => {
   User.find( {} )
+    .select("firstName lastName email userType role createdAt")
     .then( users => {
       if ( !users ) return res.status( 400 ).json( { error: "User list is empty" } );
       res.json( users );
@@ -227,7 +229,7 @@ exports.votePoll = ( req, res ) => {
   } )
     .then(response => response.json())
     .then( resp => {
-      if ( !resp ) return res.status( 400 ).json( { error: "Vote failed. Try again" } );
+      if ( resp.error ) return res.status( 400 ).json( { error: resp.error } );
       res.json( resp );
     } )
     .catch( err => {
