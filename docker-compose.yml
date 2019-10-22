@@ -21,7 +21,7 @@ services:
       - 'poll'
       - 'user'
     ports:
-      - "80:3070"
+      - "3070:80"
   client:
     build:
       context: ./client
@@ -44,7 +44,7 @@ services:
       - DB_NAME=testpoll
     volumes:
       - /app/node_modules
-      - ./api:/app
+      - ./poll:/app
   user:
     build:
       context: ./user
@@ -59,4 +59,4 @@ services:
       - JWT_SECRET=myawesomesecretyouknow
     volumes:
       - /app/node_modules
-      - ./api:/app
+      - ./user:/app

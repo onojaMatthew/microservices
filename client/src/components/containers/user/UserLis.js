@@ -8,7 +8,7 @@ class UserList extends Component {
   render() {
     const { match, users } = this.props;
     console.log( users )
-    const userData = users && users.users && users.users.map( user => (
+    const userData = users && users.users && users.users.length > 0 ? users.users.map( user => (
       <Col md={4} key={user._id}>
         <div className="poll-card">
           <div className="poll-image">
@@ -23,9 +23,8 @@ class UserList extends Component {
             </Link>
           </p>
         </div>
-
       </Col>
-    ) )
+    ) ) : <p>User list empty</p>
     return (
       <div>
         <h3>Hello from users</h3>

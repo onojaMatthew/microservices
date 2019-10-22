@@ -4,13 +4,14 @@ import { Col, Row } from "react-bootstrap";
 import avatar from "../../../assets/images/banner1.jpeg";
 import Auth from "../../../helpers/Auth";
 
-const PollList = ( { polls: { polls }, match, } ) => {
-  
-  const pollData = polls && polls.map( poll => (
-    <Col md={4} key={poll._id}>
+const PollList = ( { polls, match, } ) => {
+  console.log(polls, " polls from pollsn")
+  const pollData = polls && polls.polls && polls.polls.length > 0 ? polls.polls.map( poll => {
+    return (
+      <Col md={4} key={poll._id}>
       <div className="poll-card">
         <div className="poll-image">
-          <img src={`http://localhost:3030/api/v1/poll/photo/${ poll._id }`}
+          <img src={`http://localhost:3030/poll/photo/${ poll._id }`}
             onError={( i ) => i.target.src = `${ avatar }`} alt="poll" />
         </div>
         <hr />
@@ -26,7 +27,9 @@ const PollList = ( { polls: { polls }, match, } ) => {
         </p>
       </div>
     </Col>
-  ) )
+    )
+  }): <p>Poll List is empt</p>
+    
   return (
     <div className="signup">
       <div className="container">

@@ -47,7 +47,7 @@ export const signupFailed = ( error ) => {
 export const signup = ( data, userType ) => {
   return dispatch => {
     dispatch( signupStart() );
-    fetch( `http://localhost:3020/api/v1/user/signup/${ userType }`, { 
+    fetch( `http://localhost:3020/user/signup/${ userType }`, { 
       method: "POST",
       headers: {
         ACCEPT: "application/json",
@@ -94,7 +94,7 @@ export const signinFailed = ( error ) => {
 export const signin = ( data, userType ) => {
   return dispatch => {
     dispatch( signinStart() );
-    fetch( `http://localhost:3020/api/v1/user/signin`, { 
+    fetch( `http://localhost:3020/user/signin`, { 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -140,7 +140,7 @@ export const getUsersFailed = ( error ) => {
 export const getUsers = ( data, userType ) => {
   return dispatch => {
     dispatch( getUsersStart() );
-    axios.get( `http://localhost:3020/api/v1/user/all`, { data } )
+    axios.get( `http://localhost:3020/user/all`, { data } )
       .then( resp => {
         dispatch( getUsersSuccess( resp.data ) );
       } )
@@ -173,7 +173,7 @@ export const getUserFailed = ( error ) => {
 export const getUser = ( userId ) => {
   return dispatch => {
     dispatch( getUsersStart() );
-    fetch( `http://localhost:3020/api/v1/user/user/${ userId }`, {
+    fetch( `http://localhost:3020/user/user/${ userId }`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -214,7 +214,7 @@ export const deleteUserFailed = ( error ) => {
 export const deleteUser = (userId) => {
   return dispatch => {
     dispatch( deleteUserStart() );
-    axios.delete( `http://localhost:3020/api/v1/user/delete/${userId}/${userType()}`)
+    axios.delete( `http://localhost:3020/user/delete/${userId}/${userType()}`)
       .then( resp => {
         dispatch( deleteUserSuccess( resp.data ) );
       } )
@@ -248,7 +248,7 @@ export const logoutFailed = ( error ) => {
 export const logout = () => {
   return dispatch => {
     dispatch( logoutStart() );
-    fetch( `http://localhost:3020/api/v1/user/signout`, {
+    fetch( `http://localhost:3020/user/signout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

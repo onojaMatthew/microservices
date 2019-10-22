@@ -14,6 +14,15 @@ class SignupForm extends Component{
     success: false,
   }
 
+  componentDidMount = () => {
+    const pathname = window.location.pathname;
+    if ( pathname === "/dashboard" || pathname === "/dashboard/" || pathname === "/dashboard/login" ) {
+      this.setState( { usertype: "admin" } )
+    } else {
+      this.setState( { usertype: "user" } )
+    }
+  };
+  
   handleChange = ( field, ev ) => {
     let fields = this.state;
     fields[ field ] = ev.target.value;

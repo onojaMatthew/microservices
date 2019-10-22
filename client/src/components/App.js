@@ -18,12 +18,10 @@ class App extends Component{
 
   componentDidMount() {
     switch ( window.location.pathname ) {
-      case "/user-signup":
+      case "/signup":
         return this.setState( { title: "Sign up as user" } );
-      case "/user-login":
+      case "/login":
         return this.setState( { title: "Log in as user" } );
-      case "/settings":
-        return this.setState( { title: "Account settings" } );
       default:
         return this.state.title;
     }
@@ -37,8 +35,8 @@ class App extends Component{
         <Header />
         <Switch>
           <Route exact path="/" component={(props) => <Home {...props}/>} />
-          <Route path="/user-signup" component={() => <SignupForm title={title} />} />
-          <Route path="/user-login" component={() => <SigninForm title={title} />} />
+          <Route path="/signup" component={() => <SignupForm title={title} />} />
+          <Route path="/login" component={() => <SigninForm title={title} />} />
           <Route path="/polls" component={( props ) => <Polls {...props} />} />
           <Route exact path="/users" component={( props ) => <Users {...props} />} />
           <Route path="/users/:userId" component={(props) => <User {...props} />} />

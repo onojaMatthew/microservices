@@ -75,8 +75,8 @@ export const POST_COMMENT_SUCCESS = "POST_COMMENT_SUCCESS"
 export const POST_COMMENT_FAILED = "POST_COMMENT_FAILED"
 
 
-const BASE_URL = "http://localhost:3020/api/v1/user";
-const MAIN_BASE_URL = "http://localhost:3030/api/v1/poll";
+const BASE_URL = "http://localhost:3020/user";
+const MAIN_BASE_URL = "http://localhost:3030/poll";
 
 export const createPollStart = () => {
   return {

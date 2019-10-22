@@ -29,7 +29,7 @@ class User extends Component {
   render() {
     const { users, polls, match } = this.props;
     let userPolls = [];
-    // let feedComment;
+  
     const userId = match.params.userId;
     const currentUser = users && users.users ? users.users : null;
     const allPolls = polls && polls.polls;
@@ -40,14 +40,6 @@ class User extends Component {
         userPolls.push(eachPoll)
       }
     }
-
-    // const feedsComment = userPolls && userPolls.map( polls => polls.comment );
-    // for ( let i = 0; i < feedsComment.length; i++ ) {
-    //   feedComment = feedsComment[ i ].map( comment => comment.comment );
-    // }
-    // const pollComment = feedComment && feedComment.map( comment => (
-    //   <p key={comment._id}>{comment}</p>
-    // ) )
   
 
     return (

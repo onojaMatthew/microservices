@@ -37,6 +37,10 @@ class Header extends Component{
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="/polls">Polls</Nav.Link>
+            {Auth.isUserAuthenticated() ? (
+              <Nav.Link href="/users">Users</Nav.Link>
+            ) : null}
+            
             {url === "/dashboard" ? (
               <NavDropdown title="Account" id="collasible-nav-dropdown">
                 <NavDropdown.Item href="/dashboard">Sign up as admin</NavDropdown.Item>
@@ -45,8 +49,8 @@ class Header extends Component{
               </NavDropdown>
             ) : (
                 <NavDropdown title="Account" id="collasible-nav-dropdown">
-                  <NavDropdown.Item href="/user-signup">Sign up as user</NavDropdown.Item>
-                  <NavDropdown.Item href="/user-login">Login as user</NavDropdown.Item>
+                  <NavDropdown.Item href="/signup">Sign up as user</NavDropdown.Item>
+                  <NavDropdown.Item href="/login">Login as user</NavDropdown.Item>
                   <NavDropdown.Divider />
                 </NavDropdown>
               )}

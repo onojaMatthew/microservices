@@ -4,17 +4,19 @@ import { connect } from "react-redux";
 import { getUsers, deleteUser } from '../../../../store/actions/actions_signup';
 import UserList from './UserList';
 import UserDetails from './UserDetails';
+import { getPoll } from '../../../../store/actions/actions_polls';
 
 class Users extends Component {
   async componentDidMount() {
-    const { getUsers } = this.props;
+    const { getUsers, getPoll } = this.props;
     try {
       await getUsers();
+      await getPoll();
     } catch(err) {}
   }
 
   render() {
-    const { match, users, deleteUser } = this.props;
+    const { match, users, polls, deleteUser } = this.props;
 
     return (
       <div>
@@ -26,6 +28,7 @@ class Users extends Component {
               <UserDetails
                 deleteUser={deleteUser}
                 users={users} {...props}
+                polls={polls}
               />}
           />
         </Switch>
@@ -36,14 +39,16 @@ class Users extends Component {
 
 const mapStateToProps = ( state ) => {
   return {
-    users: state.account
+    users: state.account,
+    polls: state.polls
   }
 }
 
 const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
     getUsers: () => dispatch( getUsers() ),
-    deleteUser: (userId) => dispatch(deleteUser(userId))
+    deleteUser: ( userId ) => dispatch( deleteUser( userId ) ),
+    getPoll: () => dispatch(getPoll())
   }
 
   return dispatchToProps;
