@@ -27,7 +27,7 @@ class User extends Component {
     } catch ( err ) { }
   }
   render() {
-    const { users, polls, match, deleteUser } = this.props;
+    const { users, polls, match } = this.props;
     let userPolls = [];
   
     const userId = match.params.userId;
@@ -66,22 +66,31 @@ class User extends Component {
               <h4 className="mb-5">Poll feeds</h4>
               <>
                 {userPolls && userPolls.map( feed => (
-                  
+                  <>
                   <Row key={feed._id} className="justify-content-md-right mb-3">
                     <Col md={2}>
                       <img
                         src={`http://localhost:3030/api/v1/poll/photo/${ feed._id }`}
                         alt=""
                         onError={( i ) => i.target.src = `${ avatar }`}
-                        style={{ borderRadius: "50%", width: 70, height: 70 }}
+                        style={{ borderRadius: "50%", width: 50, height: 50 }}
                       />
                     </Col>
                     <Col md={10}>
-                      <p><strong>Name</strong>: {feed.name}</p>
-                      <p><strong>Likes</strong>: {feed.likes.length}</p>
-                      <p><strong>Votes</strong>: {feed.votes.length}</p>
+                      <p><strong>Name</strong>: {feed.name ? feed.name : "No name"}</p>
+                      <Row>
+
+                        <Col md={2}>
+                          <p><strong>Likes</strong>: {feed.likes.length}</p>
+                        </Col>
+                        <Col md={2}>
+                          <p><strong>Votes</strong>: {feed.votes.length}</p>
+                        </Col>
+                      </Row>
                     </Col>
+                    <hr/>
                   </Row>
+                  </>
                   ) )
                 }
               </>

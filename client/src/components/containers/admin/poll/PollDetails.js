@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, Col, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import avatar from "../../../../assets/images/banner1.jpeg";
 import { userType, isAuthenticated } from "../../../../helpers/authenticate";
 import EditPoll from "./EditPoll";

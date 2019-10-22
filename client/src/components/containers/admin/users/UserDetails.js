@@ -74,9 +74,6 @@ class UserDetails extends Component {
                           <p><strong>Votes</strong>: {feed.votes.length}</p>
                         </Col>
                       </Row>
-                      
-                      
-                      
                     </Col>
                   </Row>
                 ) )
