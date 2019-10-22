@@ -1,13 +1,13 @@
-version: '3'
+version: '2'
 
 services:
   mongo:
     image: "mongo:latest"
     restart: always
     environment:
-      - DB_USER=socialapp
-      - DB_PASSWORD=socialapp1
-      - DB_NAME=social-app
+      - DB_USER=testpoll
+      - DB_PASSWORD=testpoll1
+      - DB_NAME=testpoll
     volumes:
       - /private/var:/data/db
     ports:
@@ -18,9 +18,10 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - 'client'
-      - 'api'
+      - 'poll'
+      - 'user'
     ports:
-      - "80:80"
+      - "80:3070"
   client:
     build:
       context: ./client
@@ -44,7 +45,7 @@ services:
     volumes:
       - /app/node_modules
       - ./api:/app
-user:
+  user:
     build:
       context: ./user
       dockerfile: Dockerfile
