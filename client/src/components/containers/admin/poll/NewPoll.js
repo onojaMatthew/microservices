@@ -22,7 +22,7 @@ class NewPoll extends Component {
     const token = isAuthenticated().token;
     const { name } = this.state;
     
-    const pollId = polls && polls[ 0 ]._id;
+    const pollId = polls && polls[0] ? polls[ 0 ]._id : null;
     console.log( "you clicked me for submition" )
     const data = { name };
     try {

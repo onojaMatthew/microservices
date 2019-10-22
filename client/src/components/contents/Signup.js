@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Alert, Form, Button } from "react-bootstrap";
+import { Alert, Spinner, Form, Button } from "react-bootstrap";
 import avatar from "../../assets/images/signup.jpeg";
 
 function Signup( { account, usertype, firstName, lastName, email, password, title, onSubmit, handleChange }) {
@@ -65,14 +65,17 @@ function Signup( { account, usertype, firstName, lastName, email, password, titl
             onChange={(e) => handleChange("password", e)}
           />
         </Form.Group>
-        
+        {account.issignupLoading === true ? (
+          <Spinner variant="info"/>
+        ) : (
         <Button
           variant="primary"
           className="button"
-          onClick={(e) => onSubmit(e)}
+          onClick={( e ) => onSubmit( e )}
         >
           Submit
-        </Button>
+        </Button>)}
+        
       </Form>
       <p>Don't have an account ? {usertype === "user" ? (
         <Link to="/signup">Login</Link>

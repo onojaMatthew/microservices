@@ -22,7 +22,7 @@ const PollList = ( { polls, match, } ) => {
               View details
             </Link>
           ): (
-            <Redirect to={"/user-login"} />
+            <Redirect to={"/login"} />
           )}
         </p>
       </div>

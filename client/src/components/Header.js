@@ -36,24 +36,30 @@ class Header extends Component{
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/polls">Polls</Nav.Link>
             {Auth.isUserAuthenticated() ? (
-              <Nav.Link href="/users">Users</Nav.Link>
+              <>
+                <Nav.Link href="/polls">Polls</Nav.Link>
+                <Nav.Link href="/users">Users</Nav.Link>
+              </> 
+            ) : null}
+            {!Auth.isUserAuthenticated() ? (
+              <>
+                {url === "/dashboard" ? (
+                  <NavDropdown title="Account" id="collasible-nav-dropdown">
+                    <NavDropdown.Item href="/dashboard">Sign up as admin</NavDropdown.Item>
+                    <NavDropdown.Item href="/dashboard/login">Login as admin</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                  </NavDropdown>
+                ) : (
+                    <NavDropdown title="Account" id="collasible-nav-dropdown">
+                      <NavDropdown.Item href="/signup">Sign up as user</NavDropdown.Item>
+                      <NavDropdown.Item href="/login">Login as user</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                    </NavDropdown>
+                  )}
+              </>
             ) : null}
             
-            {url === "/dashboard" ? (
-              <NavDropdown title="Account" id="collasible-nav-dropdown">
-                <NavDropdown.Item href="/dashboard">Sign up as admin</NavDropdown.Item>
-                <NavDropdown.Item href="/dashboard/login">Login as admin</NavDropdown.Item>
-                <NavDropdown.Divider />
-              </NavDropdown>
-            ) : (
-                <NavDropdown title="Account" id="collasible-nav-dropdown">
-                  <NavDropdown.Item href="/signup">Sign up as user</NavDropdown.Item>
-                  <NavDropdown.Item href="/login">Login as user</NavDropdown.Item>
-                  <NavDropdown.Divider />
-                </NavDropdown>
-              )}
           </Nav>
           <>
             <span style={{ color: "#fff"}}>{isAuthenticated().user ? isAuthenticated().user.firstName : null}</span>

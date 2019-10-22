@@ -134,6 +134,7 @@ class PollDetails extends Component {
                     />
                   </div>
                   <button
+                    disabled={selectedPoll && selectedPoll.disabled === true}
                     className="btn btn-info mb-2"
                     onClick={( e ) => this.postComment(selectedPoll._id, e)}
                   >Post Comment</button>

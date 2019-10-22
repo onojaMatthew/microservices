@@ -43,12 +43,13 @@ class UserDetails extends Component {
                   <p><strong>Email</strong>:{currentUser  && currentUser.email}</p>
                 </Col>
               </Row>
-              <Row className="justify-content-md-right">
+              <Row className="justify-content-md-right mb-5">
                 <Button
                   variant="danger"
                   onClick={() => this.onDelete(currentUser._id)}
                 >Delete user</Button>
               </Row>
+              <hr />
               <h4 className="mb-5">Poll feeds</h4>
               <>
                 {userPolls && userPolls.map( feed => (
@@ -59,13 +60,23 @@ class UserDetails extends Component {
                         src={`http://localhost:3030/api/v1/poll/photo/${ feed._id }`}
                         alt=""
                         onError={( i ) => i.target.src = `${ avatar }`}
-                        style={{ borderRadius: "50%", width: 70, height: "auto" }}
+                        style={{ borderRadius: "50%", width: 50, height: 50 }}
                       />
                     </Col>
                     <Col md={10}>
-                      <p><strong>Name</strong>: {feed.name}</p>
-                      <p><strong>Likes</strong>: {feed.likes.length}</p>
-                      <p><strong>Votes</strong>: {feed.votes.length}</p>
+                      <p><strong>Name</strong>: {feed.name ? feed.name : "No name"}</p>
+                      <Row>
+                        
+                        <Col md={2}>
+                          <p><strong>Likes</strong>: {feed.likes.length}</p>
+                        </Col>
+                        <Col md={2}>
+                          <p><strong>Votes</strong>: {feed.votes.length}</p>
+                        </Col>
+                      </Row>
+                      
+                      
+                      
                     </Col>
                   </Row>
                 ) )

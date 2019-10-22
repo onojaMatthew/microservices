@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { getUsers, deleteUser } from "../../../store/actions/actions_signup";
 import UserList from './UserLis';
-// import UserList from './UserList';
-// import UserDetails from './UserDetails';
 
 class Users extends Component {
   async componentDidMount() {

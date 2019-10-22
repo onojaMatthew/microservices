@@ -6,26 +6,26 @@ import pollposter from "../../../../assets/images/banner1.jpeg";
 class PollList extends Component {
 
   render() {
-    const { polls: { polls }, match } = this.props;
-    const pollData = polls && polls.map( poll => (
+    const { polls, match } = this.props;
+    const pollData = polls && polls.polls && polls.polls.length > 0 ? polls.polls.map( poll => (
       <Col md={4} key={poll._id}>
-          <div className="poll-card">
-            <div className="poll-image">
+        <div className="poll-card">
+          <div className="poll-image">
             <img src={`http://localhost:3030/poll/${ poll._id }`}
-              onError={( i ) => i.target.src=`${pollposter}`}
+              onError={( i ) => i.target.src = `${ pollposter }`}
               alt="poll" />
-            </div>
-            <hr />
-            <p className="lead">{poll.name}</p>
+          </div>
+          <hr />
+          <p className="lead">{poll.name}</p>
           <p className="view">
             <Link to={`${ match.url }/${ poll._id }`} style={{ textDecoration: "none" }}>
               View details
             </Link>
           </p>
-          </div>
+        </div>
        
       </Col>
-    ) )
+    ) ) : null;
     
     return (
       <div>

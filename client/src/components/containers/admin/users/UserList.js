@@ -15,8 +15,8 @@ class UserList extends Component{
             <img src={avater} alt="poll" />
           </div>
           <hr />
-          <p className="lead"><strong>Name</strong>{user.firstName} {user.lastName}</p>
-          <p><strong>Email </strong>: {user.email}</p>
+          <p><strong>Name</strong> {user.firstName} {user.lastName}</p>
+          <p><strong>Email</strong>: {user.email}</p>
           <p className="view">
             <Link to={`${ match.url }/${ user._id }`} style={{ textDecoration: "none" }}>
               View details

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Button } from "react-bootstrap";
 import avatar from "../../../assets/images/banner1.jpeg";
-import { getUser } from "../../../store/actions/actions_signup";
+import { getUser, deleteUser } from "../../../store/actions/actions_signup";
 import { getPoll } from "../../../store/actions/actions_polls";
 
 class User extends Component {
@@ -23,11 +23,11 @@ class User extends Component {
     const { deleteUser } = this.props;
     try {
       await deleteUser( userId );
-      window.location.href = "/dashboard/index/users";
+      window.location.href = "/users";
     } catch ( err ) { }
   }
   render() {
-    const { users, polls, match } = this.props;
+    const { users, polls, match, deleteUser } = this.props;
     let userPolls = [];
   
     const userId = match.params.userId;
@@ -73,7 +73,7 @@ class User extends Component {
                         src={`http://localhost:3030/api/v1/poll/photo/${ feed._id }`}
                         alt=""
                         onError={( i ) => i.target.src = `${ avatar }`}
-                        style={{ borderRadius: "50%", width: 70, height: "auto" }}
+                        style={{ borderRadius: "50%", width: 70, height: 70 }}
                       />
                     </Col>
                     <Col md={10}>
@@ -105,7 +105,7 @@ const mapDispatchToProps = ( dispatch ) => {
   const dispatchToProps = {
     getUser: ( userId ) => dispatch( getUser( userId ) ),
     getPoll: () => dispatch( getPoll()),
-    // deleteUser: ( userId ) => dispatch( deleteUser( userId ) )
+    deleteUser: ( userId ) => dispatch( deleteUser( userId ) )
   }
 
   return dispatchToProps;

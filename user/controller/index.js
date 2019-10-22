@@ -160,7 +160,7 @@ exports.createPoll = ( req, res ) => {
   /**
    * We make a call to the poll service to create a new poll
    */
-  fetch( `http://localhost:3030/api/v1/poll/create/${ userId }/${ userType }/${pollId}`, { 
+  fetch( `http://localhost:3030/poll/create/${ userId }/${ userType }/${pollId}`, { 
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -197,7 +197,7 @@ exports.likePoll = ( req, res ) => {
   /**
    * We make a call to the poll service to like the poll with @param pollId
    */
-  fetch( `http://localhost:3030/api/v1/poll/like/${ userType }/${ pollId }/${ userId }`, {
+  fetch( `http://localhost:3030/poll/like/${ userType }/${ pollId }/${ userId }`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -234,7 +234,7 @@ exports.votePoll = ( req, res ) => {
   /**
    * We make a call to the poll service to vote the poll with @param pollId
    */
-  fetch( `http://localhost:3030/api/v1/poll/vote/${ userType }/${ pollId }/${ userId }`, {
+  fetch( `http://localhost:3030/poll/vote/${ userType }/${ pollId }/${ userId }`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -270,7 +270,7 @@ exports.tagsPoll = ( req, res ) => {
   /**
    * We make a call to the poll service to vote the poll with @param pollId
    */
-  fetch( `http://localhost:3030/api/v1/poll/tags/${ userType }/${ pollId }/`, {
+  fetch( `http://localhost:3030/poll/tags/${ userType }/${ pollId }/`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -307,7 +307,7 @@ exports.disablePoll = ( req, res ) => {
   /**
    * We make a call to the poll service to enable the poll with @param pollId
    */
-  fetch( `http://localhost:3030/api/v1/poll/disable/${ userType }/${ pollId }`, {
+  fetch( `http://localhost:3030/poll/disable/${ userType }/${ pollId }`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -345,7 +345,7 @@ exports.enablePoll = ( req, res ) => {
   /**
    * We make a call to the poll service to enable the poll with @param pollId
    */
-  fetch( `http://localhost:3030/api/v1/poll/enable/${ userType }/${ pollId }`, {
+  fetch( `http://localhost:3030/poll/enable/${ userType }/${ pollId }`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -383,7 +383,7 @@ exports.uploadPhoto = ( req, res ) => {
   /**
    * We make a call to the poll service to vote the poll with @param pollId
    */
-  fetch( `http://localhost:3030/api/v1/poll/upload/${userType}/${pollId}`, {
+  fetch( `http://localhost:3030/poll/upload/${userType}/${pollId}`, {
     method: "PUT",
     body: photo
   } )
@@ -416,7 +416,7 @@ exports.deletePoll = ( req, res ) => {
   /**
    * We make a call to the poll service to delete the poll with @param pollId
    */
-  axios.delete( `http://localhost:3030/api/v1/poll/delete/${ pollId }`, {
+  axios.delete( `http://localhost:3030/poll/delete/${ pollId }`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

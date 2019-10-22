@@ -206,7 +206,6 @@ class PollDetails extends Component {
     console.log( this.state.isActive, " is acti")
     return (
       <div className="mt-5">
-        {this.props.polls.disableSuccess === true ? <Alert>Poll successfull disabled</Alert> : null}
         {this.renderView()}
       </div>
     );
