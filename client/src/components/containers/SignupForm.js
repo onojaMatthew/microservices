@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import Signup from "../contents/Signup";
 import { Row, Col } from "react-bootstrap";
 import { signup } from "../../store/actions/actions_signup";

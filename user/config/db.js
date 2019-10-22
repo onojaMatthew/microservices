@@ -4,14 +4,11 @@ require( "dotenv" ).config();
 
 let db_url;
 const env = process.env.NODE_ENV || 'development';
-if ( env === 'test' ) {
-  db_url = process.env.TEST_DB;
-} else if ( env === "development" ) {
-  db_url = process.env.DB_URL;
+if( env === "development" ) {
+  db_url = `mongodb://${ process.env.DB_USER }:${ process.env.DB_PASSWORD }@ds237308.mlab.com:37308/${ process.env.DB_NAME }`;
 } else {
   db_url = process.env.DB_PROD;
 }
-
 
 module.exports = () => {
   mongoose.Promise = global.Promise;

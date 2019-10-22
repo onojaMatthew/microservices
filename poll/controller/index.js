@@ -177,7 +177,7 @@ exports.votePoll = ( req, res ) => {
 // Allows users to like a poll with the given ID
 exports.likePoll = ( req, res ) => {
   const { userId, pollId, userType } = req.params;
-
+  console.log(userId, "user id")
   // We check whether the user type is available in the request params. If not, return the error message
   if ( userType !== "user" ) return res.status( 400 ).json( { error: "Only users can like a poll" } );
   // We check for the user ID in the rquest params. If not provided, return the error message

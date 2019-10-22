@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  mongo:
+    image: "mongo:latest"
+    restart: always
+    environment:
+      - DB_USER=socialapp
+      - DB_PASSWORD=socialapp1
+      - DB_NAME=social-app
+    volumes:
+      - /private/var:/data/db
+    ports:
+      - "27017:27017"
+  nginx: 
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - 'client'
+      - 'api'
+    ports:
+      - "80:80"
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    expose:
+      - '3000'
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+  poll:
+    build:
+      context: ./poll
+      dockerfile: Dockerfile
+    restart: "always"
+    expose:
+      - '3030'
+    environment:
+      - DB_USER=testpoll
+      - DB_PASSWORD=testpoll1
+      - DB_NAME=testpoll
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    restart: "always"
+    expose:
+      - '3020'
+    environment:
+      - DB_USER=testpoll
+      - DB_PASSWORD=testpoll1
+      - DB_NAME=testpoll
+      - JWT_SECRET=myawesomesecretyouknow
+    volumes:
+      - /app/node_modules
+      - ./api:/app

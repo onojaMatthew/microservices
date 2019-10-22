@@ -28,11 +28,28 @@ class User extends Component {
   }
   render() {
     const { users, polls, match } = this.props;
-    
+    let userPolls = [];
+    // let feedComment;
+    const userId = match.params.userId;
     const currentUser = users && users.users ? users.users : null;
-    const comment = polls.polls && polls.polls.comment ? polls.polls.comment : null;
-    console.log( comment, "comment" );
-    console.log( polls, "current user")
+    const allPolls = polls && polls.polls;
+    for ( let i = 0; i < allPolls.length; i++ ) {
+      let eachPoll = allPolls[ i ];
+      let comments = eachPoll.comment.map(comment => comment.createdBy);
+      if ( eachPoll.likes.includes( userId ) || eachPoll.votes.includes( userId ) || comments.includes(userId)) {
+        userPolls.push(eachPoll)
+      }
+    }
+
+    // const feedsComment = userPolls && userPolls.map( polls => polls.comment );
+    // for ( let i = 0; i < feedsComment.length; i++ ) {
+    //   feedComment = feedsComment[ i ].map( comment => comment.comment );
+    // }
+    // const pollComment = feedComment && feedComment.map( comment => (
+    //   <p key={comment._id}>{comment}</p>
+    // ) )
+  
+
     return (
       <div>
         <div className="detail">
@@ -43,17 +60,40 @@ class User extends Component {
               <hr />
 
               <Row className="mb-5 mt-3">
-                <Col md={12}>
+                <Col md={9}>
                   <p><strong>Name</strong>:{currentUser && currentUser.firstName} {currentUser && currentUser.lastName}</p>
                   <p><strong>Email</strong>:{currentUser && currentUser.email}</p>
                 </Col>
-              </Row>
-              <Row className="justify-content-md-right">
-                <Button
+                <Col md={3}>
+                  <Button
                   variant="danger"
                   onClick={() => this.onDelete( currentUser._id )}
-                >Delete user</Button>
+                  >Delete user</Button>
+                </Col>
               </Row>
+              <h4 className="mb-5">Poll feeds</h4>
+              <>
+                {userPolls && userPolls.map( feed => (
+                  
+                  <Row key={feed._id} className="justify-content-md-right mb-3">
+                    <Col md={2}>
+                      <img
+                        src={`http://localhost:3030/api/v1/poll/photo/${ feed._id }`}
+                        alt=""
+                        onError={( i ) => i.target.src = `${ avatar }`}
+                        style={{ borderRadius: "50%", width: 70, height: "auto" }}
+                      />
+                    </Col>
+                    <Col md={10}>
+                      <p><strong>Name</strong>: {feed.name}</p>
+                      <p><strong>Likes</strong>: {feed.likes.length}</p>
+                      <p><strong>Votes</strong>: {feed.votes.length}</p>
+                    </Col>
+                  </Row>
+                  ) )
+                }
+              </>
+             
             </Col>
           </Row> 
         </div>

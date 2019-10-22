@@ -6,9 +6,9 @@ import avater from "../../../assets/images/banner1.jpeg";
 class UserList extends Component {
 
   render() {
-    const { match, users: { users } } = this.props;
+    const { match, users } = this.props;
     console.log( users )
-    const userData = users && users.map( user => (
+    const userData = users && users.users && users.users.map( user => (
       <Col md={4} key={user._id}>
         <div className="poll-card">
           <div className="poll-image">

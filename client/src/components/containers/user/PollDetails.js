@@ -72,7 +72,7 @@ class PollDetails extends Component {
           <Col md={10}>
             <h5>{selectedPoll && selectedPoll.name}</h5>
             <img
-              src={`http://localhost:3040/api/v1/poll/photo/${ pId }`}
+              src={`http://localhost:3030/api/v1/poll/photo/${ pId }`}
               alt="poll"
               onError={( i ) => i.target.src = `${ avatar }`}
               style={{

@@ -14,7 +14,7 @@ class Users extends Component {
   }
 
   render() {
-    const { match, users, deleteUser } = this.props;
+    const { match, users } = this.props;
     return (
       <div className="container">
         <UserList match={match} users={users} />

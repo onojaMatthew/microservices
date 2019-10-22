@@ -97,7 +97,7 @@ export const signin = ( data, userType ) => {
     fetch( `http://localhost:3020/api/v1/user/signin`, { 
       method: "POST",
       headers: {
-        "Content-Ty": "application/json",
+        "Content-Type": "application/json",
         ACCEPT: "application/json"
       },
       body: JSON.stringify(data)
